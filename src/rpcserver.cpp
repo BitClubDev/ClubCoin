@@ -221,10 +221,12 @@ static const CRPCCommand vRPCCommands[] =
   //  ------------------------  -----------------------  ---------- ---------- ---------
     { "help",                   &help,                   true,      true,      false },
     { "stop",                   &stop,                   true,      true,      false },
+    { "getblockchaininfo",      &getblockchaininfo,      true,      false,     false },
     { "getbestblockhash",       &getbestblockhash,       true,      false,     false },
     { "getblockcount",          &getblockcount,          true,      false,     false },
     { "getconnectioncount",     &getconnectioncount,     true,      false,     false },
     { "getpeerinfo",            &getpeerinfo,            true,      false,     false },
+    { "getnetworkinfo",         &getnetworkinfo,         true,      false,     false },
     { "addnode",                &addnode,                true,      true,      false },
     { "getaddednodeinfo",       &getaddednodeinfo,       true,      true,      false },
     { "ping",                   &ping,                   true,      false,     false },
@@ -708,6 +710,17 @@ static string JSONRPCExecBatch(const Array& vReq)
         ret.push_back(JSONRPCExecOne(vReq[reqIdx]));
 
     return write_string(Value(ret), false) + "\n";
+}
+
+std::string HelpExampleCli(const std::string& methodname, const std::string& args)
+{
+    return "> bitcoin-cli " + methodname + " " + args + "\n";
+}
+
+std::string HelpExampleRpc(const std::string& methodname, const std::string& args)
+{
+    return "> curl --user myusername --data-binary '{\"jsonrpc\": \"1.0\", \"id\":\"curltest\", "
+        "\"method\": \"" + methodname + "\", \"params\": [" + args + "] }' -H 'content-type: text/plain;' http://127.0.0.1:8332/\n";
 }
 
 void ServiceConnection(AcceptedConnection *conn)
