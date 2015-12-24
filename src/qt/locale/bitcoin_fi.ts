@@ -4,7 +4,7 @@
     <message>
         <location filename="../forms/aboutdialog.ui" line="+14"/>
         <source>About ClubCoin</source>
-        <translation>Tietoa Blackcoinista</translation>
+        <translation>Tietoa ClubCoinista</translation>
     </message>
     <message>
         <location line="+39"/>
@@ -1690,7 +1690,7 @@ Tämä tarkoittaa, että ainakin %2 rahansiirtopalkkio tarvitaan.</translation>
         <location line="+5"/>
         <location line="+5"/>
         <source>Send Coins</source>
-        <translation>Lähetä Blackcoineja</translation>
+        <translation>Lähetä ClubCoineja</translation>
     </message>
     <message>
         <location line="+76"/>
