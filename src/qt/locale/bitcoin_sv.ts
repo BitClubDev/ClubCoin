@@ -4,7 +4,7 @@
     <message>
         <location filename="../forms/aboutdialog.ui" line="+14"/>
         <source>About ClubCoin</source>
-        <translation>Vad du behöver veta om Blackcoin</translation>
+        <translation>Vad du behöver veta om ClubCoin</translation>
     </message>
     <message>
         <location line="+39"/>
@@ -261,7 +261,7 @@ This product includes software developed by the OpenSSL Project for use in the O
     <message>
         <location line="+82"/>
         <source>ClubCoin will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your coins from being stolen by malware infecting your computer.</source>
-        <translation>Blackcoin plånboken kommer nu att stängas för att slutföra krypteringen: Kom ihåg att även en krypterad plånboks säkerhet kan äventyras genom keyloggers eller dylika malwares.</translation>
+        <translation>ClubCoin plånboken kommer nu att stängas för att slutföra krypteringen: Kom ihåg att även en krypterad plånboks säkerhet kan äventyras genom keyloggers eller dylika malwares.</translation>
     </message>
     <message>
         <location line="+13"/>
@@ -726,7 +726,7 @@ Adress: %4
     <message>
         <location filename="../bitcoin.cpp" line="+104"/>
         <source>A fatal error occurred. ClubCoin can no longer continue safely and will quit.</source>
-        <translation>Ett fatalt fel uppstod. Blackcoin kan inte fortsätta och stänger programmet.</translation>
+        <translation>Ett fatalt fel uppstod. ClubCoin kan inte fortsätta och stänger programmet.</translation>
     </message>
 </context>
 <context>
@@ -1020,7 +1020,7 @@ Detta betyder att en avgift på minst %2 krävs.</translation>
     <message>
         <location line="+10"/>
         <source>The label associated with this address book entry</source>
-        <translation>Namnet som kopplats till denna Blackcoin-adress</translation>
+        <translation>Namnet som kopplats till denna ClubCoin-adress</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -1060,7 +1060,7 @@ Detta betyder att en avgift på minst %2 krävs.</translation>
     <message>
         <location line="-5"/>
         <source>The entered address &quot;%1&quot; is not a valid ClubCoin address.</source>
-        <translation>Den inslagna adressen &quot;%1&quot; är inte en giltig Blackcoin adress.</translation>
+        <translation>Den inslagna adressen &quot;%1&quot; är inte en giltig ClubCoin adress.</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -1152,12 +1152,12 @@ Detta betyder att en avgift på minst %2 krävs.</translation>
     <message>
         <location line="+31"/>
         <source>Automatically start ClubCoin after logging in to the system.</source>
-        <translation>Starta Blackcoin automatiskt vid inloggning.</translation>
+        <translation>Starta ClubCoin automatiskt vid inloggning.</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>&amp;Start ClubCoin on system login</source>
-        <translation>&amp;Starta Blackcoin vid inloggning</translation>
+        <translation>&amp;Starta ClubCoin vid inloggning</translation>
     </message>
     <message>
         <location line="+21"/>
@@ -2851,7 +2851,7 @@ for example: alertnotify=echo %%s | mail -s &quot;ClubCoin Alert&quot; admin@foo
     <message>
         <location line="-103"/>
         <source>Warning: Please check that your computer&apos;s date and time are correct! If your clock is wrong ClubCoin will not work properly.</source>
-        <translation>Varning: Kolla att din dators tid och datum är rätt. Blackcoin kan inte fungera ordentligt om tiden i datorn är fel.</translation>
+        <translation>Varning: Kolla att din dators tid och datum är rätt. ClubCoin kan inte fungera ordentligt om tiden i datorn är fel.</translation>
     </message>
     <message>
         <location line="+132"/>
@@ -3223,12 +3223,12 @@ for example: alertnotify=echo %%s | mail -s &quot;ClubCoin Alert&quot; admin@foo
     <message>
         <location line="+4"/>
         <source>Error loading wallet.dat: Wallet requires newer version of ClubCoin</source>
-        <translation>Kunde inte ladda wallet.dat: En nyare version av Blackcoin krävs</translation>
+        <translation>Kunde inte ladda wallet.dat: En nyare version av ClubCoin krävs</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Wallet needed to be rewritten: restart ClubCoin to complete</source>
-        <translation>Plånboken måste skrivas om: Starta om Blackcoin för att slutföra</translation>
+        <translation>Plånboken måste skrivas om: Starta om ClubCoin för att slutföra</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -3293,7 +3293,7 @@ for example: alertnotify=echo %%s | mail -s &quot;ClubCoin Alert&quot; admin@foo
     <message>
         <location line="+125"/>
         <source>Unable to bind to %s on this computer. ClubCoin is probably already running.</source>
-        <translation>Kan inte binda till %s på denna dator. Blackcoin är sannolikt redan startad.</translation>
+        <translation>Kan inte binda till %s på denna dator. ClubCoin är sannolikt redan startad.</translation>
     </message>
     <message>
         <location line="-101"/>

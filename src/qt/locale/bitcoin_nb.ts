@@ -1145,7 +1145,7 @@ Dette betyr at det trengs en avgift på minimum %2.</translation>
     <message>
         <location line="+3"/>
         <source>&amp;Start ClubCoin on system login</source>
-        <translation>&amp;Start Blackcoin ved innlogging</translation>
+        <translation>&amp;Start ClubCoin ved innlogging</translation>
     </message>
     <message>
         <location line="+21"/>
@@ -1673,7 +1673,7 @@ Dette betyr at det trengs en avgift på minimum %2.</translation>
         <location line="+5"/>
         <location line="+5"/>
         <source>Send Coins</source>
-        <translation>Send Blackcoins</translation>
+        <translation>Send ClubCoins</translation>
     </message>
     <message>
         <location line="+76"/>
