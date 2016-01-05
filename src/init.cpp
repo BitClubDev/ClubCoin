@@ -34,6 +34,8 @@ using namespace boost;
 
 #ifdef ENABLE_WALLET
 CWallet* pwalletMain = NULL;
+#else
+#error NEEDS WALLET ENABLED
 #endif
 CClientUIInterface uiInterface;
 bool fConfChange;
