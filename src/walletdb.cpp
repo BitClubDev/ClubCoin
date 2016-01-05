@@ -11,6 +11,11 @@
 #include "sync.h"
 #include "wallet.h"
 
+#if defined(FORCE_BOOST_EMULATED_SCOPED_ENUMS)
+#define BOOST_NO_SCOPED_ENUMS
+#define BOOST_NO_CXX11_SCOPED_ENUMS
+#endif
+
 #include <boost/version.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/foreach.hpp>
