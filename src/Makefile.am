@@ -2,7 +2,7 @@ DIST_SUBDIRS =
 
 AM_LDFLAGS = $(PTHREAD_CFLAGS) $(LIBTOOL_LDFLAGS) $(HARDENED_LDFLAGS)
 AM_CXXFLAGS = $(HARDENED_CXXFLAGS)
-AM_CPPFLAGS = $(HARDENED_CPPFLAGS)
+AM_CPPFLAGS = $(HARDENED_CPPFLAGS) -DENABLE_WALLET
 
 if EMBEDDED_LEVELDB
 LEVELDB_CPPFLAGS += -I$(srcdir)/leveldb/include
@@ -200,6 +200,7 @@ libclubcoin_server_a_SOURCES = \
   txdb-leveldb.cpp \
   txmempool.cpp \
   wallet.cpp \
+  walletdb.cpp \
   $(CLUBCOIN_CORE_H)
 
 

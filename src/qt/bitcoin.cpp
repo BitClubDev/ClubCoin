@@ -27,6 +27,28 @@
 #include <QSplashScreen>
 #include <QLibraryInfo>
 
+
+
+/**
+ ** Yes, this is a giant hack, I do not yet know how to fix the build system
+ ** to support directly the Qt plugins. Yuck.
+ **/
+
+#ifdef _WINNT_
+#include <QtPlugin>
+Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin);
+#endif
+
+#ifdef __linux__
+#include <QtPlugin>
+Q_IMPORT_PLUGIN(QXcbIntegrationPlugin);
+#endif
+
+/**
+ ** This is the deprecated way to do it.
+ **/
+
+#if 0
 #if defined(BITCOIN_NEED_QT_PLUGINS) && !defined(_BITCOIN_QT_PLUGINS_INCLUDED)
 #define _BITCOIN_QT_PLUGINS_INCLUDED
 #define __INSURE__
@@ -37,6 +59,8 @@ Q_IMPORT_PLUGIN(qtwcodecs)
 Q_IMPORT_PLUGIN(qkrcodecs)
 Q_IMPORT_PLUGIN(qtaccessiblewidgets)
 #endif
+#endif
+
 
 // Need a global reference for the notifications to find the GUI
 static BitcoinGUI *guiref;
@@ -134,7 +158,7 @@ int main(int argc, char *argv[])
     QTextCodec::setCodecForCStrings(QTextCodec::codecForTr());
 #endif
 
-    Q_INIT_RESOURCE(bitcoin);
+    Q_INIT_RESOURCE(clubcoin);
     QApplication app(argc, argv);
 
     // Do this early as we don't want to bother initializing if we are just calling IPC
