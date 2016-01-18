@@ -167,7 +167,11 @@ bool static Socks5(string strDest, int port, SOCKET& hSocket)
     char *pszSocks5 = pszSocks5Init;
     ssize_t nSize = sizeof(pszSocks5Init) - 1;
 
+#ifdef __APPLE__
+    ssize_t ret = send(hSocket, pszSocks5, nSize, SO_NOSIGPIPE);
+#else
     ssize_t ret = send(hSocket, pszSocks5, nSize, MSG_NOSIGNAL);
+#endif
     if (ret != nSize)
     {
         closesocket(hSocket);
@@ -190,7 +194,11 @@ bool static Socks5(string strDest, int port, SOCKET& hSocket)
     strSocks5 += strDest;
     strSocks5 += static_cast<char>((port >> 8) & 0xFF);
     strSocks5 += static_cast<char>((port >> 0) & 0xFF);
+#ifdef __APPLE__
+    ret = send(hSocket, strSocks5.data(), strSocks5.size(), SO_NOSIGPIPE);
+#else
     ret = send(hSocket, strSocks5.data(), strSocks5.size(), MSG_NOSIGNAL);
+#endif
     if (ret != (ssize_t)strSocks5.size())
     {
         closesocket(hSocket);
