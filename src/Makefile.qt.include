@@ -281,7 +281,6 @@ CLUBCOIN_QT_CPP = \
   qt/optionsmodel.cpp \
   qt/overviewpage.cpp \
   qt/paymentserver.cpp \
-  qt/qrc_bitcoin.cpp \
   qt/qrcodedialog.cpp \
   qt/qvalidatedlineedit.cpp \
   qt/qvaluecombobox.cpp \
@@ -296,8 +295,7 @@ CLUBCOIN_QT_CPP = \
   qt/transactionrecord.cpp \
   qt/transactiontablemodel.cpp \
   qt/transactionview.cpp \
-  qt/walletmodel.cpp \
-  qt/qrc_bitcoin.cpp
+  qt/walletmodel.cpp
 
 if TARGET_WINDOWS
 #CLUBCOIN_QT_CPP += qt/winshutdownmonitor.cpp XXX
