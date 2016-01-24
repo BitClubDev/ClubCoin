@@ -212,7 +212,7 @@ endif
 
 dist_noinst_SCRIPTS = autogen.sh
 
-EXTRA_DIST = $(top_srcdir)/share/genbuild.sh qa/pull-tester/rpc-tests.py qa/rpc-tests $(DIST_DOCS) $(WINDOWS_PACKAGING) $(OSX_PACKAGING)
+EXTRA_DIST = $(top_srcdir)/share/genbuild.sh $(DIST_DOCS) $(WINDOWS_PACKAGING) $(OSX_PACKAGING)
 
 CLEANFILES = $(OSX_DMG) $(CLUBCOIN_WIN_INSTALLER)
 
