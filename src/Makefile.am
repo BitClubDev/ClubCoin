@@ -43,7 +43,7 @@ CLUBCOIN_INCLUDES += $(BDB_CPPFLAGS)
 #EXTRA_LIBRARIES += libclubcoin_wallet.a
 endif
 if ENABLE_ZMQ
-EXTRA_LIBRARIES += libclubcoin_zmq.a
+#EXTRA_LIBRARIES += libclubcoin_zmq.a
 endif
 
 if BUILD_CLUBCOIN_LIBS
@@ -71,96 +71,62 @@ endif
 CLUBCOIN_CORE_H = \
   addrman.h \
   alert.h \
-  amount.h \
+  allocators.h \
   arith_uint256.h \
   base58.h \
-  bloom.h \
-  chain.h \
+  bignum.h \
   chainparams.h \
-  chainparamsbase.h \
   chainparamsseeds.h \
   checkpoints.h \
-  checkqueue.h \
   clientversion.h \
   coincontrol.h \
-  coins.h \
   compat.h \
-  compat/byteswap.h \
-  compat/endian.h \
-  compat/sanity.h \
-  compressor.h \
-  consensus/consensus.h \
-  consensus/merkle.h \
-  consensus/params.h \
-  consensus/validation.h \
-  core_io.h \
-  core_memusage.h \
+  core.h \
+  crypter.h \
+  db.h \
   hash.h \
-  httprpc.h \
-  httpserver.h \
   init.h \
+  kernel.h \
   key.h \
   keystore.h \
-  dbwrapper.h \
-  limitedmap.h \
   main.h \
-  memusage.h \
-  merkleblock.h \
   miner.h \
-  net.h \
+  mruset.h \
   netbase.h \
-  noui.h \
-  policy/fees.h \
-  policy/policy.h \
-  pow.h \
-  prevector.h \
-  primitives/block.h \
-  primitives/transaction.h \
+  net.h \
+  pbkdf2.h \
   protocol.h \
-  pubkey.h \
-  random.h \
-  reverselock.h \
   rpcclient.h \
   rpcprotocol.h \
   rpcserver.h \
-  scheduler.h \
-  script/interpreter.h \
-  script/script.h \
-  script/script_error.h \
-  script/sigcache.h \
-  script/sign.h \
-  script/standard.h \
+  script.h \
+  scrypt.h \
   serialize.h \
-  streams.h \
-  support/allocators/secure.h \
-  support/allocators/zeroafterfree.h \
-  support/cleanse.h \
-  support/pagelocker.h \
   sync.h \
   threadsafety.h \
   timedata.h \
   tinyformat.h \
-  torcontrol.h \
   txdb.h \
+  txdb-leveldb.h \
   txmempool.h \
   ui_interface.h \
   uint256.h \
-  undo.h \
   util.h \
-  utilmoneystr.h \
-  utilstrencodings.h \
-  utiltime.h \
-  validationinterface.h \
   version.h \
-  wallet/crypter.h \
-  wallet/db.h \
-  wallet/wallet.h \
-  wallet/wallet_ismine.h \
-  wallet/walletdb.h \
-  zmq/zmqabstractnotifier.h \
-  zmq/zmqconfig.h\
-  zmq/zmqnotificationinterface.h \
-  zmq/zmqpublishnotifier.h
+  walletdb.h \
+  wallet.h \
+  json/json_spirit_error_position.h \
+  json/json_spirit.h \
+  json/json_spirit_reader.cpp \
+  json/json_spirit_reader.h \
+  json/json_spirit_reader_template.h \
+  json/json_spirit_stream_reader.h \
+  json/json_spirit_utils.h \
+  json/json_spirit_value.cpp \
+  json/json_spirit_value.h \
+  json/json_spirit_writer.cpp \
+  json/json_spirit_writer.h \
+  json/json_spirit_writer_template.h
 
 
 obj/build.h: FORCE
@@ -252,7 +218,7 @@ libclubcoin_util_a_SOURCES = \
   $(CLUBCOIN_CORE_H)
 
 if GLIBC_BACK_COMPAT
-libclubcoin_util_a_SOURCES += compat/glibc_compat.cpp
+#libclubcoin_util_a_SOURCES += compat/glibc_compat.cpp
 endif
 
 # cli: shared between clubcoin-cli and clubcoin-qt
@@ -336,14 +302,14 @@ clubcoin_tx_LDADD += $(BOOST_LIBS) $(CRYPTO_LIBS)
 
 # clubcoinconsensus library #
 if BUILD_CLUBCOIN_LIBS
-include_HEADERS = script/clubcoinconsensus.h
+include_HEADERS =
 libclubcoinconsensus_la_SOURCES = \
   hash.cpp \
   script.cpp \
   scrypt.cpp
 
 if GLIBC_BACK_COMPAT
-  libclubcoinconsensus_la_SOURCES += compat/glibc_compat.cpp
+#  libclubcoinconsensus_la_SOURCES += compat/glibc_compat.cpp
 endif
 
 libclubcoinconsensus_la_LDFLAGS = $(AM_LDFLAGS) -no-undefined $(RELDFLAGS)
