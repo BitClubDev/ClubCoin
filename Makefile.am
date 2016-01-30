@@ -212,7 +212,7 @@ endif
 
 dist_noinst_SCRIPTS = autogen.sh
 
-EXTRA_DIST = $(top_srcdir)/share/genbuild.sh $(DIST_DOCS) $(WINDOWS_PACKAGING) $(OSX_PACKAGING)
+EXTRA_DIST = $(top_srcdir)/share/genbuild.sh $(DIST_DOCS) $(WINDOWS_PACKAGING) $(OSX_PACKAGING) src/qt/res
 
 CLEANFILES = $(OSX_DMG) $(CLUBCOIN_WIN_INSTALLER)
 
