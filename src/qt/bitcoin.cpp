@@ -2,6 +2,10 @@
  * W.J. van der Laan 2011-2012
  */
 
+#if defined(HAVE_CONFIG_H)
+#include "config/bitcoin-config.h"
+#endif
+
 #include <QApplication>
 
 #include "bitcoingui.h"
@@ -29,35 +33,25 @@
 
 
 
-/**
- ** Yes, this is a giant hack, I do not yet know how to fix the build system
- ** to support directly the Qt plugins. Yuck.
- **/
-
-#ifdef _WINNT_
+#if defined(QT_STATICPLUGIN)
 #include <QtPlugin>
-Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin);
-#endif
-
-#ifdef __linux__
-#include <QtPlugin>
-Q_IMPORT_PLUGIN(QXcbIntegrationPlugin);
-#endif
-
-/**
- ** This is the deprecated way to do it.
- **/
-
-#if 0
-#if defined(BITCOIN_NEED_QT_PLUGINS) && !defined(_BITCOIN_QT_PLUGINS_INCLUDED)
-#define _BITCOIN_QT_PLUGINS_INCLUDED
-#define __INSURE__
-#include <QtPlugin>
+#if QT_VERSION < 0x050000
 Q_IMPORT_PLUGIN(qcncodecs)
 Q_IMPORT_PLUGIN(qjpcodecs)
 Q_IMPORT_PLUGIN(qtwcodecs)
 Q_IMPORT_PLUGIN(qkrcodecs)
 Q_IMPORT_PLUGIN(qtaccessiblewidgets)
+#else
+#if QT_VERSION < 0x050400
+Q_IMPORT_PLUGIN(AccessibleFactory)
+#endif
+#if defined(QT_QPA_PLATFORM_XCB)
+Q_IMPORT_PLUGIN(QXcbIntegrationPlugin);
+#elif defined(QT_QPA_PLATFORM_WINDOWS)
+Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin);
+#elif defined(QT_QPA_PLATFORM_COCOA)
+Q_IMPORT_PLUGIN(QCocoaIntegrationPlugin);
+#endif
 #endif
 #endif
 
