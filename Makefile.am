@@ -35,7 +35,8 @@ OSX_PACKAGING = $(OSX_DEPLOY_SCRIPT) $(OSX_FANCY_PLIST) $(OSX_INSTALLER_ICONS) $
   $(top_srcdir)/contrib/macdeploy/$(OSX_BACKGROUND_IMAGE) \
   $(top_srcdir)/contrib/macdeploy/DS_Store \
   $(top_srcdir)/contrib/macdeploy/detached-sig-apply.sh \
-  $(top_srcdir)/contrib/macdeploy/detached-sig-create.sh
+  $(top_srcdir)/contrib/macdeploy/detached-sig-create.sh \
+  $(top_srcdir)/share/qt
 
 COVERAGE_INFO = baseline_filtered_combined.info baseline.info block_test.info \
   leveldb_baseline.info test_clubcoin_filtered.info total_coverage.info \
