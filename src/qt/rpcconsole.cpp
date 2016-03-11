@@ -1,5 +1,5 @@
 #include "rpcconsole.h"
-#include "ui_rpcconsole.h"
+#include "ui_debugwindow.h"
 
 #include "clientmodel.h"
 #include "guiutil.h"
