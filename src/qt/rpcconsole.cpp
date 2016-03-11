@@ -15,6 +15,10 @@
 
 #include <openssl/crypto.h>
 
+#ifdef ENABLE_WALLET
+#include <db_cxx.h>
+#endif
+
 // TODO: add a scrollback limit, as there is currently none
 // TODO: make it possible to filter out categories (esp debug messages when implemented)
 // TODO: receive errors and debug messages through ClientModel
@@ -206,8 +210,14 @@ RPCConsole::RPCConsole(QWidget *parent) :
 
     connect(ui->clearButton, SIGNAL(clicked()), this, SLOT(clear()));
 
-    // set OpenSSL version label
+    // set library version labels
     ui->openSSLVersion->setText(SSLeay_version(SSLEAY_VERSION));
+#ifdef ENABLE_WALLET
+    ui->berkeleyDBVersion->setText(DbEnv::version(0, 0, 0));
+#else
+    ui->label_berkeleyDBVersion->hide();
+    ui->berkeleyDBVersion->hide();
+#endif
 
     startExecutor();
     setTrafficGraphRange(INITIAL_TRAFFIC_GRAPH_MINS);
