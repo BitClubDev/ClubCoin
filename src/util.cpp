@@ -1119,13 +1119,6 @@ void ShrinkDebugFile()
 
 static int64_t nMockTime = 0;  // For unit testing
 
-int64_t GetTime()
-{
-    if (nMockTime) return nMockTime;
-
-    return time(NULL);
-}
-
 void SetMockTime(int64_t nMockTimeIn)
 {
     nMockTime = nMockTimeIn;
