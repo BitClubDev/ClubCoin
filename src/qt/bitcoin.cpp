@@ -143,6 +143,8 @@ int main(int argc, char *argv[])
 {
     fHaveGUI = true;
 
+    SetupEnvironment();
+
     // Command-line options take precedence:
     ParseParameters(argc, argv);
 
