@@ -30,9 +30,9 @@
 #include <string>
 #include <vector>
 
-#include <boost/thread.hpp>
-#include <boost/filesystem.hpp>
 #include <boost/filesystem/path.hpp>
+#include <boost/signals2/signal.hpp>
+#include <boost/thread/exceptions.hpp>
 
 class uint256;
 
@@ -285,20 +285,6 @@ inline int64_t GetPerformanceCounter()
 #endif
     return nCounter;
 }
-
-inline int64_t GetTimeMillis()
-{
-    return (boost::posix_time::ptime(boost::posix_time::microsec_clock::universal_time()) -
-            boost::posix_time::ptime(boost::gregorian::date(1970,1,1))).total_milliseconds();
-}
-
-inline int64_t GetTimeMicros()
-{
-    return (boost::posix_time::ptime(boost::posix_time::microsec_clock::universal_time()) -
-            boost::posix_time::ptime(boost::gregorian::date(1970,1,1))).total_microseconds();
-}
-
-std::string DateTimeStrFormat(const char* pszFormat, int64_t nTime);
 
 static const std::string strTimestampFormat = "%Y-%m-%d %H:%M:%S UTC";
 inline std::string DateTimeStrFormat(int64_t nTime)

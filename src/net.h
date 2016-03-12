@@ -1,20 +1,12 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
-// Copyright (c) 2009-2012 The Bitcoin developers
-// Distributed under the MIT/X11 software license, see the accompanying
+// Copyright (c) 2009-2014 The Bitcoin Core developers
+// Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
+
 #ifndef BITCOIN_NET_H
 #define BITCOIN_NET_H
 
-#include <deque>
-#include <boost/array.hpp>
-#include <boost/foreach.hpp>
-#include <boost/signals2/signal.hpp>
 #include <openssl/rand.h>
-
-
-#ifndef WIN32
-#include <arpa/inet.h>
-#endif
 
 #include "mruset.h"
 #include "netbase.h"
@@ -22,10 +14,24 @@
 #include "addrman.h"
 #include "hash.h"
 
+#include <deque>
+#include <stdint.h>
+
+#ifndef WIN32
+#include <arpa/inet.h>
+#endif
+
+#include <boost/filesystem/path.hpp>
+#include <boost/foreach.hpp>
+#include <boost/signals2/signal.hpp>
+
 class CNode;
 class CBlockIndex;
 extern int nBestHeight;
 
+namespace boost {
+    class thread_group;
+} // namespace boost
 
 /** Time between pings automatically sent out for latency probing and keepalive (in seconds). */
 static const int PING_INTERVAL = 2 * 60;

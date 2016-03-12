@@ -3,10 +3,6 @@
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#include <boost/algorithm/string/replace.hpp>
-#include <boost/filesystem.hpp>
-#include <boost/filesystem/fstream.hpp>
-
 #include "alert.h"
 #include "chainparams.h"
 #include "checkpoints.h"
@@ -18,6 +14,14 @@
 #include "txmempool.h"
 #include "ui_interface.h"
 
+#include <sstream>
+
+#include <boost/algorithm/string/replace.hpp>
+#include <boost/filesystem.hpp>
+#include <boost/filesystem/fstream.hpp>
+#include <boost/math/distributions/poisson.hpp>
+#include <boost/thread.hpp>
+
 using namespace std;
 using namespace boost;
 
@@ -25,9 +29,9 @@ using namespace boost;
 # error "ClubCoin cannot be compiled without assertions."
 #endif
 
-//
-// Global state
-//
+/**
+ * Global state
+ */
 
 CCriticalSection cs_setpwalletRegistered;
 set<CWallet*> setpwalletRegistered;
