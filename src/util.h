@@ -292,14 +292,6 @@ inline std::string DateTimeStrFormat(int64_t nTime)
     return DateTimeStrFormat(strTimestampFormat.c_str(), nTime);
 }
 
-
-template<typename T>
-void skipspaces(T& it)
-{
-    while (isspace(*it))
-        ++it;
-}
-
 inline bool IsSwitchChar(char c)
 {
 #ifdef WIN32
@@ -446,6 +438,13 @@ public:
         return vSorted;
     }
 };
+
+/**
+ * Return the number of physical cores available on the current system.
+ * @note This does not count virtual cores, such as those provided by HyperThreading
+ * when boost is newer than 1.56.
+ */
+int GetNumCores();
 
 void SetThreadPriority(int nPriority);
 void RenameThread(const char* name);

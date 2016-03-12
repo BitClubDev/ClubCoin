@@ -7,7 +7,9 @@
 #include <boost/assign/list_of.hpp>
 
 #include "kernel.h"
+
 #include "txdb.h"
+#include "util.h"
 
 using namespace std;
 
