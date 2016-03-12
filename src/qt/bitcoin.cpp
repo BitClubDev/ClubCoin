@@ -6,8 +6,6 @@
 #include "config/bitcoin-config.h"
 #endif
 
-#include <QApplication>
-
 #include "bitcoingui.h"
 #include "clientmodel.h"
 #include "walletmodel.h"
@@ -23,6 +21,10 @@
 #include "macdockiconhandler.h"
 #endif
 
+#include <boost/filesystem/operations.hpp>
+#include <boost/thread.hpp>
+
+#include <QApplication>
 #include <QMessageBox>
 #include <QTextCodec>
 #include <QLocale>
@@ -30,8 +32,6 @@
 #include <QTranslator>
 #include <QSplashScreen>
 #include <QLibraryInfo>
-
-
 
 #if defined(QT_STATICPLUGIN)
 #include <QtPlugin>
