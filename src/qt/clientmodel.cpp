@@ -144,6 +144,14 @@ QString ClientModel::formatFullVersion() const
     return QString::fromStdString(FormatFullVersion());
 }
 
+QString ClientModel::formatSubVersion() const
+{
+    /* XXX Really we should use strSubVersion XXX */
+    std::string _subversion = FormatSubVersion(CLIENT_NAME, CLIENT_VERSION,
+	std::vector<string>());
+    return QString::fromStdString(_subversion);
+}
+
 QString ClientModel::formatBuildDate() const
 {
     return QString::fromStdString(CLIENT_DATE);

@@ -1,5 +1,5 @@
 #include "rpcconsole.h"
-#include "ui_rpcconsole.h"
+#include "ui_debugwindow.h"
 
 #include "clientmodel.h"
 #include "guiutil.h"
@@ -14,6 +14,10 @@
 #include <QScrollBar>
 
 #include <openssl/crypto.h>
+
+#ifdef ENABLE_WALLET
+#include <db_cxx.h>
+#endif
 
 // TODO: add a scrollback limit, as there is currently none
 // TODO: make it possible to filter out categories (esp debug messages when implemented)
@@ -206,8 +210,14 @@ RPCConsole::RPCConsole(QWidget *parent) :
 
     connect(ui->clearButton, SIGNAL(clicked()), this, SLOT(clear()));
 
-    // set OpenSSL version label
+    // set library version labels
     ui->openSSLVersion->setText(SSLeay_version(SSLEAY_VERSION));
+#ifdef ENABLE_WALLET
+    ui->berkeleyDBVersion->setText(DbEnv::version(0, 0, 0));
+#else
+    ui->label_berkeleyDBVersion->hide();
+    ui->berkeleyDBVersion->hide();
+#endif
 
     startExecutor();
     setTrafficGraphRange(INITIAL_TRAFFIC_GRAPH_MINS);
@@ -274,6 +284,7 @@ void RPCConsole::setClientModel(ClientModel *model)
 
         // Provide initial values
         ui->clientVersion->setText(model->formatFullVersion());
+	ui->clientUserAgent->setText(model->formatSubVersion());
         ui->clientName->setText(model->clientName());
         ui->buildDate->setText(model->formatBuildDate());
         ui->startupTime->setText(model->formatClientStartupTime());

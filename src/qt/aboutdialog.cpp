@@ -15,7 +15,19 @@ void AboutDialog::setModel(ClientModel *model)
 {
     if(model)
     {
-        ui->versionLabel->setText(model->formatFullVersion());
+	QString version = "";
+	version += model->formatFullVersion();
+
+	/* On x86 add a bit specifier to the version so that users can distinguish between
+	 * 32 and 64 bit builds. On other architectures, 32/64 bit may be more ambiguous.
+	 */
+#if defined(__x86_64__)
+	version += " " + tr("(%1-bit)").arg(64);
+#elif defined(__i386__)
+	version += " " + tr("(%1-bit)").arg(32);
+#endif
+
+        ui->versionLabel->setText(version);
     }
 }
 
