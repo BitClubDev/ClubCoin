@@ -5,6 +5,7 @@
 
 #include "rpcprotocol.h"
 
+#include "serialize.h"
 #include "util.h"
 
 #include <stdint.h>
