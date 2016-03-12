@@ -1117,13 +1117,6 @@ void ShrinkDebugFile()
     }
 }
 
-static int64_t nMockTime = 0;  // For unit testing
-
-void SetMockTime(int64_t nMockTimeIn)
-{
-    nMockTime = nMockTimeIn;
-}
-
 uint32_t insecure_rand_Rz = 11;
 uint32_t insecure_rand_Rw = 11;
 void seed_insecure_rand(bool fDeterministic)
