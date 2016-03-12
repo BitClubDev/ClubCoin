@@ -112,6 +112,7 @@ CLUBCOIN_CORE_H = \
   ui_interface.h \
   uint256.h \
   util.h \
+  utiltime.h \
   version.h \
   walletdb.h \
   wallet.h \
@@ -215,6 +216,7 @@ libclubcoin_util_a_SOURCES = \
   rpcprotocol.cpp \
   sync.cpp \
   util.cpp \
+  utiltime.cpp \
   $(CLUBCOIN_CORE_H)
 
 if GLIBC_BACK_COMPAT

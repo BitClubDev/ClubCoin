@@ -12,8 +12,10 @@
 #include <sys/resource.h>
 #endif
 
+#include "compat.h"
 #include "serialize.h"
 #include "tinyformat.h"
+#include "utiltime.h"
 
 #include <map>
 #include <list>
@@ -73,17 +75,6 @@ T* alignup(T* p)
 #else
 #define MAX_PATH            1024
 #endif
-
-inline void MilliSleep(int64_t n)
-{
-#if BOOST_VERSION >= 105000
-    boost::this_thread::sleep_for(boost::chrono::milliseconds(n));
-#else
-    boost::this_thread::sleep(boost::posix_time::milliseconds(n));
-#endif
-}
-
-
 
 extern std::map<std::string, std::string> mapArgs;
 extern std::map<std::string, std::vector<std::string> > mapMultiArgs;
