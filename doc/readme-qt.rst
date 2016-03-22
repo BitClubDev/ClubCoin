@@ -1,8 +1,16 @@
-BlackCoin-qt: Qt5 GUI for BlackCoin
+ClubCoin-qt: Qt5 GUI for ClubCoin
 ===============================
 
-Build instructions
-===================
+Build instructions {DEPRECATED}
+=============================
+
+The developers need to update the build instructions to reflect more accurately
+the current build system. ClubCoin migrated to automake, autotool and friends,
+as such following the qmake instructions below are not recommended.
+
+Furthermore, building official releases is done for all officially supported
+platforms on a Linux host, using cross-compilers. For more information,
+please consult the documentation for gitian-builder.
 
 Debian
 -------
@@ -115,9 +123,11 @@ flag to qmake to control this:
 Berkely DB version warning
 ==========================
 
-A warning for people using the *static binary* version of BlackCoin on a Linux/UNIX-ish system (tl;dr: **Berkely DB databases are not forward compatible**).
+<dev note: is this even true? This whole section needs work.>
 
-The static binary version of BlackCoin is linked against libdb 5.0 (see also `this Debian issue`_).
+A warning for people using the *static binary* version of ClubCoin on a Linux/UNIX-ish system (tl;dr: **Berkely DB databases are not forward compatible**).
+
+The static binary version of ClubCoin is linked against libdb 5.0 (see also `this Debian issue`_).
 
 Now the nasty thing is that databases from 5.X are not compatible with 4.X.
 
@@ -130,6 +140,7 @@ significant hassle!
 
 Ubuntu 11.10 warning
 ====================
+<dev note: is this even true? This whole section needs work.>
 
 Ubuntu 11.10 has a package called 'qt-at-spi' installed by default.  At the time of writing, having that package
 installed causes blackcoin-qt to crash intermittently.  The issue has been reported as `launchpad bug 857790`_, but
