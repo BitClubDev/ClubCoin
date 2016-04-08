@@ -1,9 +1,14 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
-// Copyright (c) 2009-2012 The Bitcoin developers
-// Distributed under the MIT/X11 software license, see the accompanying
+// Copyright (c) 2009-2015 The Bitcoin Core developers
+// Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
-#ifndef BITCOIN_MAIN_H
-#define BITCOIN_MAIN_H
+
+#ifndef CLUBCOIN_MAIN_H
+#define CLUBCOIN_MAIN_H
+
+#if defined(HAVE_CONFIG_H)
+#include "config/bitcoin-config.h"
+#endif
 
 #include "core.h"
 #include "bignum.h"
@@ -12,6 +17,7 @@
 #include "net.h"
 #include "script.h"
 #include "scrypt.h"
+#include "clientversion.h"
 
 #include <list>
 
@@ -1352,4 +1358,4 @@ protected:
     friend void ::UnregisterAllWallets();
 };
 
-#endif
+#endif // CLUBCOIN_MAIN_H

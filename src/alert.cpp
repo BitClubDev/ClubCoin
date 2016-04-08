@@ -11,6 +11,7 @@
 #include "timedata.h"
 #include "ui_interface.h"
 #include "util.h"
+#include "clientversion.h"
 
 #include <stdint.h>
 #include <algorithm>

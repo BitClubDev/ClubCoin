@@ -3,6 +3,7 @@
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 #include <string>
 
+#include "clientversion.h"
 #include "version.h"
 
 // Name of client reported in the 'version' message. Report the same name

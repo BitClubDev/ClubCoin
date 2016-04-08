@@ -9,6 +9,7 @@
 #include "sync.h"
 #include "ui_interface.h"
 #include "uint256.h"
+#include "clientversion.h"
 #include "version.h"
 
 #include <algorithm>

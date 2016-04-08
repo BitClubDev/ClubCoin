@@ -9,6 +9,7 @@
 #include "serialize.h"
 #include "sync.h"
 #include "version.h"
+#include "clientversion.h"
 
 #include <map>
 #include <string>
