@@ -212,7 +212,7 @@ libclubcoin_common_a_SOURCES = \
 libclubcoin_util_a_CPPFLAGS = $(AM_CPPFLAGS) $(CLUBCOIN_INCLUDES)
 libclubcoin_util_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 libclubcoin_util_a_SOURCES = \
-  version.cpp \
+  clientversion.cpp \
   rpcprotocol.cpp \
   sync.cpp \
   util.cpp \

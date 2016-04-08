@@ -1147,23 +1147,6 @@ string FormatVersion(int nVersion)
         return strprintf("%d.%d.%d.%d", nVersion/1000000, (nVersion/10000)%100, (nVersion/100)%100, nVersion%100);
 }
 
-string FormatFullVersion()
-{
-    return CLIENT_BUILD;
-}
-
-// Format the subversion field according to BIP 14 spec (https://en.bitcoin.it/wiki/BIP_0014)
-std::string FormatSubVersion(const std::string& name, int nClientVersion, const std::vector<std::string>& comments)
-{
-    std::ostringstream ss;
-    ss << "/";
-    ss << name << ":" << FormatVersion(nClientVersion);
-    if (!comments.empty())
-        ss << "(" << boost::algorithm::join(comments, "; ") << ")";
-    ss << "/";
-    return ss.str();
-}
-
 #ifdef WIN32
 boost::filesystem::path GetSpecialFolderPath(int nFolder, bool fCreate)
 {
