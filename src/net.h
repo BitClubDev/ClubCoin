@@ -215,6 +215,12 @@ public:
     bool fNetworkNode;
     bool fSuccessfullyConnected;
     bool fDisconnect;
+    // We use fRelayTxes for two purposes -
+    // a) it allows us to not relay tx invs before receiving the peer's version message
+    // b) the peer may tell us in its version message that we should not relay tx invs
+    //    unless it loads a bloom filter.
+    bool fRelayTxes;
+    bool fSentAddr;
     CSemaphoreGrant grantOutbound;
     int nRefCount;
 protected:
