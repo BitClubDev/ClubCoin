@@ -1122,7 +1122,7 @@ void ThreadDNSAddressSeed()
         } else {
             vector<CNetAddr> vIPs;
             vector<CAddress> vAdd;
-            if (LookupHost(seed.host.c_str(), vIPs))
+            if (LookupHost(seed.host.c_str(), vIPs, 0, true))
             {
                 BOOST_FOREACH(CNetAddr& ip, vIPs)
                 {
@@ -1596,7 +1596,7 @@ void static Discover(boost::thread_group& threadGroup)
     if (gethostname(pszHostName, sizeof(pszHostName)) != SOCKET_ERROR)
     {
         vector<CNetAddr> vaddr;
-        if (LookupHost(pszHostName, vaddr))
+        if (LookupHost(pszHostName, vaddr, 0, true))
         {
             BOOST_FOREACH (const CNetAddr &addr, vaddr)
             {
