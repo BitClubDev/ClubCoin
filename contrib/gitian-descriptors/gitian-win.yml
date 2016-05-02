@@ -1,5 +1,5 @@
 ---
-name: "clubcoin-win-1.1.0"
+name: "clubcoin-win-1.1.99"
 enable_cache: true
 suites:
 - "trusty"
