@@ -1,5 +1,5 @@
 ---
-name: "clubcoin-win-1.0.99"
+name: "clubcoin-win-1.1.0"
 enable_cache: true
 suites:
 - "trusty"
@@ -129,9 +129,9 @@ script: |
     make ${MAKEOPTS}
     make deploy
     make install-strip
-    cp -f clubcoin-*setup*.exe $OUTDIR/
+    #cp -f clubcoin-*setup*.exe $OUTDIR/
     cd installed
-    mv ${DISTNAME}/bin/*.dll ${DISTNAME}/lib/
+    #mv {DISTNAME}/bin/*.dll ${DISTNAME}/lib/
     find . -name "lib*.la" -delete
     find . -name "lib*.a" -delete
     rm -rf ${DISTNAME}/lib/pkgconfig
@@ -139,7 +139,7 @@ script: |
     cd ../..
   done
   cd $OUTDIR
-  rename 's/-setup\.exe$/-setup-unsigned.exe/' *-setup.exe
-  find . -name "*-setup-unsigned.exe" | sort | tar --no-recursion --mode='u+rw,go+r-w,a+X' --owner=0 --group=0 -c -T - | gzip -9n > ${OUTDIR}/${DISTNAME}-win-unsigned.tar.gz
+  #rename 's/-setup\.exe$/-setup-unsigned.exe/' *-setup.exe
+  #find . -name "*-setup-unsigned.exe" | sort | tar --no-recursion --mode='u+rw,go+r-w,a+X' --owner=0 --group=0 -c -T - | gzip -9n > ${OUTDIR}/${DISTNAME}-win-unsigned.tar.gz
   mv ${OUTDIR}/${DISTNAME}-x86_64-*.zip ${OUTDIR}/${DISTNAME}-win64.zip
   mv ${OUTDIR}/${DISTNAME}-i686-*.zip ${OUTDIR}/${DISTNAME}-win32.zip
