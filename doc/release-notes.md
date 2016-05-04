@@ -1,6 +1,12 @@
 1.2.0 Change Log
 ========================
 
+LevelDB
+------------------------
+
+* The build system is now integrated with leveldb.
+* LevelDB update to 1.18.
+
 C++11
 ------------------------
 
