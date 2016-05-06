@@ -1,8 +1,10 @@
 // Copyright (c) 2012 Pieter Wuille
-// Distributed under the MIT/X11 software license, see the accompanying
+// Copyright (c) 2012-2015 The Bitcoin Core developers
+// Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
-#ifndef _BITCOIN_ADDRMAN
-#define _BITCOIN_ADDRMAN 1
+
+#ifndef BITCOIN_ADDRMAN_H
+#define BITCOIN_ADDRMAN_H
 
 #include "netbase.h"
 #include "protocol.h"
@@ -15,32 +17,34 @@
 #include <stdint.h>
 #include <vector>
 
-#include <openssl/rand.h>
-
-
-/** Extended statistics about a CAddress */
+/**
+ * Extended statistics about a CAddress
+ */
 class CAddrInfo : public CAddress
 {
+
+
+public:
+    //! last try whatsoever by us (memory only)
+    int64_t nLastTry;
+
 private:
-    // where knowledge about this address first came from
+    //! where knowledge about this address first came from
     CNetAddr source;
 
-    // last successful connection by us
+    //! last successful connection by us
     int64_t nLastSuccess;
 
-    // last try whatsoever by us:
-    // int64_t CAddress::nLastTry
-
-    // connection attempts since last successful attempt
+    //! connection attempts since last successful attempt
     int nAttempts;
 
-    // reference count in new sets (memory only)
+    //! reference count in new sets (memory only)
     int nRefCount;
 
-    // in tried set? (memory only)
+    //! in tried set? (memory only)
     bool fInTried;
 
-    // position in vRandom
+    //! position in vRandom
     int nRandomPos;
 
     friend class CAddrMan;
@@ -75,25 +79,25 @@ public:
         Init();
     }
 
-    // Calculate in which "tried" bucket this entry belongs
+    //! Calculate in which "tried" bucket this entry belongs
     int GetTriedBucket(const uint256 &nKey) const;
 
-    // Calculate in which "new" bucket this entry belongs, given a certain source
+    //! Calculate in which "new" bucket this entry belongs, given a certain source
     int GetNewBucket(const uint256 &nKey, const CNetAddr& src) const;
 
-    // Calculate in which "new" bucket this entry belongs, using its default source
+    //! Calculate in which "new" bucket this entry belongs, using its default source
     int GetNewBucket(const uint256 &nKey) const
     {
         return GetNewBucket(nKey, source);
     }
 
-    // Calculate in which position of a bucket to store this entry.
+    //! Calculate in which position of a bucket to store this entry.
     int GetBucketPosition(const uint256 &nKey, bool fNew, int nBucket) const;
 
-    // Determine whether the statistics about this entry are bad enough so that it can just be deleted
+    //! Determine whether the statistics about this entry are bad enough so that it can just be deleted
     bool IsTerrible(int64_t nNow = GetAdjustedTime()) const;
 
-    // Calculate the relative chance this entry should be given when selecting nodes to connect to
+    //! Calculate the relative chance this entry should be given when selecting nodes to connect to
     double GetChance(int64_t nNow = GetAdjustedTime()) const;
 
 };
@@ -124,119 +128,122 @@ public:
  *      consistency checks for the entire data structure.
  */
 
-// total number of buckets for tried addresses
+//! total number of buckets for tried addresses
 #define ADDRMAN_TRIED_BUCKET_COUNT 256
 
-// total number of buckets for new addresses
+//! total number of buckets for new addresses
 #define ADDRMAN_NEW_BUCKET_COUNT 1024
 
-// maximum allowed number of entries in buckets for new and tried addresses
+//! maximum allowed number of entries in buckets for new and tried addresses
 #define ADDRMAN_BUCKET_SIZE 64
 
-// over how many buckets entries with tried addresses from a single group (/16 for IPv4) are spread
+//! over how many buckets entries with tried addresses from a single group (/16 for IPv4) are spread
 #define ADDRMAN_TRIED_BUCKETS_PER_GROUP 8
 
-// over how many buckets entries with new addresses originating from a single group are spread
+//! over how many buckets entries with new addresses originating from a single group are spread
 #define ADDRMAN_NEW_BUCKETS_PER_SOURCE_GROUP 64
 
-// in how many buckets for entries with new addresses a single address may occur
+//! in how many buckets for entries with new addresses a single address may occur
 #define ADDRMAN_NEW_BUCKETS_PER_ADDRESS 8
 
-// how old addresses can maximally be
+//! how old addresses can maximally be
 #define ADDRMAN_HORIZON_DAYS 30
 
-// after how many failed attempts we give up on a new node
+//! after how many failed attempts we give up on a new node
 #define ADDRMAN_RETRIES 3
 
-// how many successive failures are allowed ...
+//! how many successive failures are allowed ...
 #define ADDRMAN_MAX_FAILURES 10
 
-// ... in at least this many days
+//! ... in at least this many days
 #define ADDRMAN_MIN_FAIL_DAYS 7
 
-// the maximum percentage of nodes to return in a getaddr call
+//! the maximum percentage of nodes to return in a getaddr call
 #define ADDRMAN_GETADDR_MAX_PCT 23
 
-// the maximum number of nodes to return in a getaddr call
+//! the maximum number of nodes to return in a getaddr call
 #define ADDRMAN_GETADDR_MAX 2500
 
-/** Stochastical (IP) address manager */
+/** 
+ * Stochastical (IP) address manager 
+ */
 class CAddrMan
 {
 private:
-    // critical section to protect the inner data structures
+    //! critical section to protect the inner data structures
     mutable CCriticalSection cs;
 
-    // secret key to randomize bucket select with
-    uint256 nKey;
-
-    // last used nId
+    //! last used nId
     int nIdCount;
 
-    // table with information about all nIds
+    //! table with information about all nIds
     std::map<int, CAddrInfo> mapInfo;
 
-    // find an nId based on its network address
+    //! find an nId based on its network address
     std::map<CNetAddr, int> mapAddr;
 
-    // randomly-ordered vector of all nIds
+    //! randomly-ordered vector of all nIds
     std::vector<int> vRandom;
 
     // number of "tried" entries
     int nTried;
 
-    // list of "tried" buckets
+    //! list of "tried" buckets
     int vvTried[ADDRMAN_TRIED_BUCKET_COUNT][ADDRMAN_BUCKET_SIZE];
 
-    // number of (unique) "new" entries
+    //! number of (unique) "new" entries
     int nNew;
 
-    // list of "new" buckets
+    //! list of "new" buckets
     int vvNew[ADDRMAN_NEW_BUCKET_COUNT][ADDRMAN_BUCKET_SIZE];
 
 protected:
+    //! secret key to randomize bucket select with
+    uint256 nKey;
 
-    // Find an entry.
+    //! Find an entry.
     CAddrInfo* Find(const CNetAddr& addr, int *pnId = NULL);
 
-    // find an entry, creating it if necessary.
-    // nTime and nServices of found node is updated, if necessary.
+    //! find an entry, creating it if necessary.
+    //! nTime and nServices of the found node are updated, if necessary.
     CAddrInfo* Create(const CAddress &addr, const CNetAddr &addrSource, int *pnId = NULL);
 
-    // Swap two elements in vRandom.
+    //! Swap two elements in vRandom.
     void SwapRandom(unsigned int nRandomPos1, unsigned int nRandomPos2);
 
-    // Move an entry from the "new" table(s) to the "tried" table
+    //! Move an entry from the "new" table(s) to the "tried" table
     void MakeTried(CAddrInfo& info, int nId);
 
-    // Delete an entry. It must not be in tried, and have refcount 0.
+    //! Delete an entry. It must not be in tried, and have refcount 0.
     void Delete(int nId);
 
-    // Clear a position in a "new" table. This is the only place where entries are actually deleted.
+    //! Clear a position in a "new" table. This is the only place where entries are actually deleted.
     void ClearNew(int nUBucket, int nUBucketPos);
 
-    // Mark an entry "good", possibly moving it from "new" to "tried".
+    //! Mark an entry "good", possibly moving it from "new" to "tried".
     void Good_(const CService &addr, int64_t nTime);
 
-    // Add an entry to the "new" table.
+    //! Add an entry to the "new" table.
     bool Add_(const CAddress &addr, const CNetAddr& source, int64_t nTimePenalty);
 
-    // Mark an entry as attempted to connect.
+    //! Mark an entry as attempted to connect.
     void Attempt_(const CService &addr, int64_t nTime);
 
-    // Select an address to connect to.
-    // nUnkBias determines how much to favor new addresses over tried ones (min=0, max=100)
-    CAddress Select_();
+    //! Select an address to connect to, if newOnly is set to true, only the new table is selected from.
+    CAddrInfo Select_(bool newOnly);
+
+    //! Wraps GetRandInt to allow tests to override RandomInt and make it determinismistic.
+    virtual int RandomInt(int nMax);
 
 #ifdef DEBUG_ADDRMAN
-    // Perform consistency check. Returns an error code or zero.
+    //! Perform consistency check. Returns an error code or zero.
     int Check_();
 #endif
 
-    // Select several addresses at once.
+    //! Select several addresses at once.
     void GetAddr_(std::vector<CAddress> &vAddr);
 
-    // Mark an entry as currently-connected-to.
+    //! Mark an entry as currently-connected-to.
     void Connected_(const CService &addr, int64_t nTime);
 
 public:
@@ -260,7 +267,7 @@ public:
      * Notice that vvTried, mapAddr and vVector are never encoded explicitly;
      * they are instead reconstructed from the other information.
      *
-     * vvNew is serialized, but only used if ADDRMAN_UNKOWN_BUCKET_COUNT didn't change,
+     * vvNew is serialized, but only used if ADDRMAN_UNKNOWN_BUCKET_COUNT didn't change,
      * otherwise it is reconstructed as well.
      *
      * This format is more complex, but significantly smaller (at most 1.5 MiB), and supports
@@ -452,13 +459,13 @@ public:
         nKey.SetNull();
     }
 
-    // Return the number of (unique) addresses in all tables.
-    int size()
+    //! Return the number of (unique) addresses in all tables.
+    size_t size() const
     {
         return vRandom.size();
     }
 
-    // Consistency check
+    //! Consistency check
     void Check()
     {
 #ifdef DEBUG_ADDRMAN
@@ -471,7 +478,7 @@ public:
 #endif
     }
 
-    // Add a single address.
+    //! Add a single address.
     bool Add(const CAddress &addr, const CNetAddr& source, int64_t nTimePenalty = 0)
     {
         bool fRet = false;
@@ -486,7 +493,7 @@ public:
         return fRet;
     }
 
-    // Add multiple addresses.
+    //! Add multiple addresses.
     bool Add(const std::vector<CAddress> &vAddr, const CNetAddr& source, int64_t nTimePenalty = 0)
     {
         int nAdd = 0;
@@ -502,7 +509,7 @@ public:
         return nAdd > 0;
     }
 
-    // Mark an entry as accessible.
+    //! Mark an entry as accessible.
     void Good(const CService &addr, int64_t nTime = GetAdjustedTime())
     {
         {
@@ -513,7 +520,7 @@ public:
         }
     }
 
-    // Mark an entry as connection attempted to.
+    //! Mark an entry as connection attempted to.
     void Attempt(const CService &addr, int64_t nTime = GetAdjustedTime())
     {
         {
@@ -526,21 +533,20 @@ public:
 
     /**
      * Choose an address to connect to.
-     * nUnkBias determines how much "new" entries are favored over "tried" ones (0-100).
      */
-    CAddress Select()
+    CAddrInfo Select(bool newOnly = false)
     {
-        CAddress addrRet;
+        CAddrInfo addrRet;
         {
             LOCK(cs);
             Check();
-            addrRet = Select_();
+            addrRet = Select_(newOnly);
             Check();
         }
         return addrRet;
     }
 
-    // Return a bunch of addresses, selected at random.
+    //! Return a bunch of addresses, selected at random.
     std::vector<CAddress> GetAddr()
     {
         Check();
@@ -553,7 +559,7 @@ public:
         return vAddr;
     }
 
-    // Mark an entry as currently-connected-to.
+    //! Mark an entry as currently-connected-to.
     void Connected(const CService &addr, int64_t nTime = GetAdjustedTime())
     {
         {
@@ -563,6 +569,7 @@ public:
             Check();
         }
     }
+
 };
 
-#endif
+#endif // BITCOIN_ADDRMAN_H
