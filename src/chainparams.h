@@ -21,8 +21,13 @@ class CAddress;
 class CBlock;
 
 struct CDNSSeedData {
-    string name, host;
-    CDNSSeedData(const string &strName, const string &strHost) : name(strName), host(strHost) {}
+    std::string name, host;
+    CDNSSeedData(const std::string &strName, const std::string &strHost) : name(strName), host(strHost) {}
+};
+
+struct SeedSpec6 {
+    uint8_t addr[16];
+    uint16_t port;
 };
 
 /**
