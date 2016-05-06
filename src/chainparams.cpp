@@ -15,10 +15,6 @@
 
 using namespace boost::assign;
 
-struct SeedSpec6 {
-    uint8_t addr[16];
-    uint16_t port;
-};
 
 #include "chainparamsseeds.h"
 
