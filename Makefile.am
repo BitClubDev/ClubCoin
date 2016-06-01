@@ -48,16 +48,7 @@ COVERAGE_INFO = baseline_filtered_combined.info baseline.info \
   leveldb_baseline_filtered.info test_clubcoin_coverage.info test_clubcoin.info
 
 dist-hook:
-	-$(MAKE) -C $(top_distdir)/src/leveldb clean
 	-$(GIT) archive --format=tar HEAD -- src/clientversion.cpp | $(AMTAR) -C $(top_distdir) -xf -
-
-distcheck-hook:
-	$(MKDIR_P) $(top_distdir)/_build/src/leveldb
-	cp -rf $(top_srcdir)/src/leveldb/* $(top_distdir)/_build/src/leveldb/
-	-$(MAKE) -C $(top_distdir)/_build/src/leveldb clean
-
-distcleancheck:
-	@:
 
 $(CLUBCOIN_WIN_INSTALLER): all-recursive
 	$(MKDIR_P) $(top_builddir)/release
