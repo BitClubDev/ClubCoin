@@ -9,7 +9,11 @@
 #include <QPixmap>
 #include <QUrl>
 
+#include "bitcoin-config.h" /* for USE_QRCODE */
+
+#ifdef USE_QRCODE
 #include <qrencode.h>
+#endif
 
 QRCodeDialog::QRCodeDialog(const QString &addr, const QString &label, bool enableReq, QWidget *parent) :
     QDialog(parent),
@@ -52,6 +56,7 @@ void QRCodeDialog::genCode()
 {
     QString uri = getURI();
 
+#ifdef USE_QRCODE
     if (uri != "")
     {
         ui->lblQRCode->setText("");
@@ -79,6 +84,7 @@ void QRCodeDialog::genCode()
 
         ui->outUri->setPlainText(uri);
     }
+#endif
 }
 
 QString QRCodeDialog::getURI()
