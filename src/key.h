@@ -1,24 +1,29 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
-// Copyright (c) 2009-2013 The Bitcoin developers
-// Distributed under the MIT/X11 software license, see the accompanying
+// Copyright (c) 2009-2015 The Bitcoin Core developers
+// Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
+
 #ifndef BITCOIN_KEY_H
 #define BITCOIN_KEY_H
 
+#include "serialize.h"
+#include "allocators.h"
+#include "hash.h"
+#include "uint256.h"
+
+#include <stdexcept>
 #include <vector>
 
-#include "allocators.h"
-#include "serialize.h"
-#include "uint256.h"
-#include "hash.h"
 
-// secp256k1:
-// const unsigned int PRIVATE_KEY_SIZE = 279;
-// const unsigned int PUBLIC_KEY_SIZE  = 65;
-// const unsigned int SIGNATURE_SIZE   = 72;
-//
-// see www.keylength.com
-// script supports up to 75 for single byte push
+/**
+ * secp256k1:
+ * const unsigned int PRIVATE_KEY_SIZE = 279;
+ * const unsigned int PUBLIC_KEY_SIZE  = 65;
+ * const unsigned int SIGNATURE_SIZE   = 72;
+ *
+ * see www.keylength.com
+ * script supports up to 75 for single byte push
+ */
 
 /** A reference to a CKey: the Hash160 of its serialized public key */
 class CKeyID : public uint160

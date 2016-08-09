@@ -14,6 +14,7 @@
 #include "addrman.h"
 #include "hash.h"
 
+#include <atomic>
 #include <deque>
 #include <stdint.h>
 
