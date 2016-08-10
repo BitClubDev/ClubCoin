@@ -92,8 +92,6 @@ extern bool fNoListen;
 extern bool fLogTimestamps;
 extern volatile bool fReopenDebugLog;
 
-void RandAddSeed();
-
 void SetupEnvironment();
 /* XXX SetupNetworking() */
 

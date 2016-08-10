@@ -148,16 +148,70 @@ void ResendWalletTransactions(bool fForce) {
 // Registration of network node signals.
 //
 
+namespace {
+// Maintain validation-specific state about nodes, protected by cs_main, instead
+// by CNode's own locks. This simplifies asynchronous operation, where
+// processing of incoming data is done after the ProcessMessage call returns,
+// and we're no longer holding the node's locks.
+struct CNodeState {
+    int nMisbehavior;
+    bool fShouldBan;
+    std::string name;
+
+    CNodeState() {
+        nMisbehavior = 0;
+        fShouldBan = false;
+    }
+};
+
+map<NodeId, CNodeState> mapNodeState;
+
+
+// Requires cs_main.
+CNodeState *State(NodeId pnode) {
+    map<NodeId, CNodeState>::iterator it = mapNodeState.find(pnode);
+    if (it == mapNodeState.end())
+        return NULL;
+    return &it->second;
+}
+
+/** XXX GetHeight() */
+
+void InitializeNode(NodeId nodeid, const CNode *pnode) {
+    LOCK(cs_main);
+    CNodeState &state = mapNodeState.insert(std::make_pair(nodeid, CNodeState())).first->second;
+    state.name = pnode->addrName;
+}
+
+void FinalizeNode(NodeId nodeid) {
+    LOCK(cs_main);
+    mapNodeState.erase(nodeid);
+}
+}
+
+bool GetNodeStateStats(NodeId nodeid, CNodeStateStats &stats) {
+    LOCK(cs_main);
+    CNodeState *state = State(nodeid);
+    if (state == NULL)
+        return false;
+    stats.nMisbehavior = state->nMisbehavior;
+    return true;
+}
+ 
 void RegisterNodeSignals(CNodeSignals& nodeSignals)
 {
     nodeSignals.ProcessMessages.connect(&ProcessMessages);
     nodeSignals.SendMessages.connect(&SendMessages);
+    nodeSignals.InitializeNode.connect(&InitializeNode);
+    nodeSignals.FinalizeNode.connect(&FinalizeNode);
 }
 
 void UnregisterNodeSignals(CNodeSignals& nodeSignals)
 {
     nodeSignals.ProcessMessages.disconnect(&ProcessMessages);
     nodeSignals.SendMessages.disconnect(&SendMessages);
+    nodeSignals.InitializeNode.disconnect(&InitializeNode);
+    nodeSignals.FinalizeNode.disconnect(&FinalizeNode);
 }
 
 
@@ -2148,7 +2202,7 @@ bool ProcessBlock(CNode* pfrom, CBlock* pblock)
         if (deltaTime < 0)
         {
             if (pfrom)
-                pfrom->Misbehaving(1);
+                Misbehaving(pfrom->GetId(), 1);
             return error("ProcessBlock() : block with timestamp before last checkpoint");
         }
     }
@@ -2724,6 +2778,23 @@ bool static AlreadyHave(CTxDB& txdb, const CInv& inv)
 
 
 
+void Misbehaving(NodeId pnode, int howmuch)
+{
+    if (howmuch == 0)
+        return;
+
+    CNodeState *state = State(pnode);
+    if (state == NULL)
+        return;
+
+    state->nMisbehavior += howmuch;
+    if (state->nMisbehavior >= GetArg("-banscore", 100))
+    {
+        LogPrintf("Misbehaving: %s (%d -> %d) BAN THRESHOLD EXCEEDED\n", state->name.c_str(), state->nMisbehavior-howmuch, state->nMisbehavior);
+        state->fShouldBan = true;
+    } else
+        LogPrintf("Misbehaving: %s (%d -> %d)\n", state->name.c_str(), state->nMisbehavior-howmuch, state->nMisbehavior);
+}
 
 void static ProcessGetData(CNode* pfrom)
 {
@@ -2830,7 +2901,7 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
         // Each connection can only send one version message
         if (pfrom->nVersion != 0)
         {
-            pfrom->Misbehaving(1);
+            Misbehaving(pfrom->GetId(), 1);
             return false;
         }
 
@@ -2940,7 +3011,7 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
     else if (pfrom->nVersion == 0)
     {
         // Must have a version message before anything else
-        pfrom->Misbehaving(1);
+        Misbehaving(pfrom->GetId(), 20);
         return false;
     }
 
@@ -2961,7 +3032,7 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
             return true;
         if (vAddr.size() > 1000)
         {
-            pfrom->Misbehaving(20);
+            Misbehaving(pfrom->GetId(), 20);
             return error("message addr size() = %u", vAddr.size());
         }
 
@@ -3023,7 +3094,7 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
         vRecv >> vInv;
         if (vInv.size() > MAX_INV_SZ)
         {
-            pfrom->Misbehaving(20);
+            Misbehaving(pfrom->GetId(), 20);
             return error("message inv size() = %u", vInv.size());
         }
 
@@ -3075,7 +3146,7 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
         vRecv >> vInv;
         if (vInv.size() > MAX_INV_SZ)
         {
-            pfrom->Misbehaving(20);
+            Misbehaving(pfrom->GetId(), 20);
             return error("message getdata size() = %u", vInv.size());
         }
 
@@ -3241,7 +3312,7 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
             if (nEvicted > 0)
                 LogPrint("mempool", "mapOrphan overflow, removed %u tx\n", nEvicted);
         }
-        if (tx.nDoS) pfrom->Misbehaving(tx.nDoS);
+        if (tx.nDoS) Misbehaving(pfrom->GetId(), tx.nDoS);
     }
 
 
@@ -3260,7 +3331,7 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
 
         if (ProcessBlock(pfrom, &block))
             mapAlreadyAskedFor.erase(inv);
-        if (block.nDoS) pfrom->Misbehaving(block.nDoS);
+        if (block.nDoS) Misbehaving(pfrom->GetId(), block.nDoS);
     }
 
 
@@ -3424,7 +3495,7 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
                 // This isn't a Misbehaving(100) (immediate ban) because the
                 // peer might be an older or different implementation with
                 // a different signature key, etc.
-                pfrom->Misbehaving(10);
+                Misbehaving(pfrom->GetId(), 10);
             }
         }
     }
@@ -3437,6 +3508,7 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
     else
     {
         // Ignore unknown commands for extensibility
+        LogPrint("net", "Unknown command \"%s\" from peer=%d\n", SanitizeString(strCommand), pfrom->id);
     }
 
 
@@ -3606,6 +3678,17 @@ bool SendMessages(CNode* pto, bool fSendTrickle)
                 pto->PushMessage("ping");
             }
         }
+
+        /** XXX ??? This whole function, sync. */
+        if (State(pto->GetId())->fShouldBan) {
+            if (pto->addr.IsLocal())
+                LogPrintf("Warning: not banning local node %s!\n", pto->addr.ToString().c_str());
+            else {
+                pto->fDisconnect = true;
+                CNode::Ban(pto->addr);
+            }
+            State(pto->GetId())->fShouldBan = false;
+        } 
 
         // Start block sync
         if (pto->fStartSync && !fImporting && !fReindex) {

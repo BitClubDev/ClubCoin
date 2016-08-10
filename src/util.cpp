@@ -11,6 +11,7 @@
 #include "uint256.h"
 #include "clientversion.h"
 #include "version.h"
+#include "random.h"
 
 #include <algorithm>
 

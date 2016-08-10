@@ -111,6 +111,7 @@ void Shutdown()
         bitdb.Flush(false);
 #endif
     StopNode();
+    UnregisterNodeSignals(GetNodeSignals());
     {
         LOCK(cs_main);
 #ifdef ENABLE_WALLET
