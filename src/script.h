@@ -1,22 +1,27 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
-// Copyright (c) 2009-2012 The Bitcoin developers
-// Distributed under the MIT/X11 software license, see the accompanying
+// Copyright (c) 2009-2015 The Bitcoin Core developers
+// Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef H_BITCOIN_SCRIPT
-#define H_BITCOIN_SCRIPT
-
-#include <string>
-#include <vector>
-
-#include <stdint.h>
-
-#include <boost/foreach.hpp>
-#include <boost/variant.hpp>
+#ifndef BITCOIN_SCRIPT_SCRIPT_H
+#define BITCOIN_SCRIPT_SCRIPT_H
 
 #include "keystore.h"
 #include "bignum.h"
 #include "util.h"
+#include "utilstrencodings.h"
+
+#include <assert.h>
+#include <climits>
+#include <limits>
+#include <stdexcept>
+#include <stdint.h>
+#include <string.h>
+#include <string>
+#include <vector>
+
+#include <boost/foreach.hpp>
+#include <boost/variant.hpp>
 
 typedef std::vector<unsigned char> valtype;
 

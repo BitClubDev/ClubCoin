@@ -88,6 +88,7 @@ CLUBCOIN_CORE_H = \
   script.h \
   scrypt.h \
   serialize.h \
+  support/cleanse.h \
   sync.h \
   threadsafety.h \
   timedata.h \
@@ -176,7 +177,9 @@ libclubcoin_wallet_a_SOURCES = \
 # crypto primitives library
 crypto_libclubcoin_crypto_a_CPPFLAGS = $(AM_CPPFLAGS) $(CLUBCOIN_CONFIG_INCLUDES)
 crypto_libclubcoin_crypto_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
-crypto_libclubcoin_crypto_a_SOURCES = 
+crypto_libclubcoin_crypto_a_SOURCES = \
+  crypto/sha512.cpp \
+  crypto/sha512.h
 
 # common: shared between clubcoind, and clubcoin-qt and non-server tools
 libclubcoin_common_a_CPPFLAGS = $(AM_CPPFLAGS) $(CLUBCOIN_INCLUDES)
@@ -199,10 +202,14 @@ libclubcoin_util_a_CPPFLAGS = $(AM_CPPFLAGS) $(CLUBCOIN_INCLUDES)
 libclubcoin_util_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 libclubcoin_util_a_SOURCES = \
   clientversion.cpp \
+  random.cpp \
   rpcprotocol.cpp \
+  support/cleanse.cpp \
   sync.cpp \
   util.cpp \
   utiltime.cpp \
+  utilstrencodings.cpp \
+  $(crypto_libclubcoin_crypto_a_SOURCES) \
   $(CLUBCOIN_CORE_H)
 
 if GLIBC_BACK_COMPAT
@@ -293,8 +300,14 @@ if BUILD_CLUBCOIN_LIBS
 include_HEADERS =
 libclubcoinconsensus_la_SOURCES = \
   hash.cpp \
+  hash.h \
   script.cpp \
-  scrypt.cpp
+  script.h \
+  scrypt.cpp \
+  scrypt.h \
+  utilstrencodings.cpp \
+  utilstrencodings.h \
+  version.h
 
 if GLIBC_BACK_COMPAT
 #  libclubcoinconsensus_la_SOURCES += compat/glibc_compat.cpp

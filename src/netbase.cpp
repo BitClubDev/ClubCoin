@@ -4,9 +4,10 @@
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include "netbase.h"
-#include "util.h"
 #include "sync.h"
 #include "hash.h"
+#include "utilstrencodings.h"
+#include "util.h"
 
 #ifndef WIN32
 #include <sys/fcntl.h>

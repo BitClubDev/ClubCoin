@@ -12,6 +12,7 @@
 #include "ui_interface.h"
 #include "util.h"
 #include "clientversion.h"
+#include "utilstrencodings.h"
 
 #include <stdint.h>
 #include <algorithm>
