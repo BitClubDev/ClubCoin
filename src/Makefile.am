@@ -185,6 +185,7 @@ crypto_libclubcoin_crypto_a_SOURCES = \
 libclubcoin_common_a_CPPFLAGS = $(AM_CPPFLAGS) $(CLUBCOIN_INCLUDES)
 libclubcoin_common_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 libclubcoin_common_a_SOURCES = \
+  base58.cpp \
   chainparams.cpp \
   core.cpp \
   hash.cpp \
