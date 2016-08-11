@@ -89,6 +89,7 @@ CLUBCOIN_CORE_H = \
   scrypt.h \
   serialize.h \
   support/cleanse.h \
+  support/pagelocker.h \
   sync.h \
   threadsafety.h \
   timedata.h \
@@ -202,6 +203,7 @@ libclubcoin_common_a_SOURCES = \
 libclubcoin_util_a_CPPFLAGS = $(AM_CPPFLAGS) $(CLUBCOIN_INCLUDES)
 libclubcoin_util_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 libclubcoin_util_a_SOURCES = \
+  support/pagelocker.cpp \
   clientversion.cpp \
   random.cpp \
   rpcprotocol.cpp \
