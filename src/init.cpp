@@ -9,6 +9,7 @@
 
 #include "init.h"
 
+#include "compat/sanity.h"
 #include "main.h"
 #include "chainparams.h"
 #include "txdb.h"
@@ -281,12 +282,11 @@ std::string HelpMessage()
 bool InitSanityCheck(void)
 {
     if(!ECC_InitSanityCheck()) {
-        InitError("OpenSSL appears to lack support for elliptic curve cryptography. For more "
-                  "information, visit https://en.bitcoin.it/wiki/OpenSSL_and_EC_Libraries");
+        InitError("Elliptic curve cryptography sanity check failure. Aborting.");
         return false;
     }
-
-    // TODO: remaining sanity checks, see #4081
+    if (!glibc_sanity_test() || !glibcxx_sanity_test())
+        return false;
 
     return true;
 }

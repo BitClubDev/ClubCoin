@@ -67,6 +67,9 @@ CLUBCOIN_CORE_H = \
   clientversion.h \
   coincontrol.h \
   compat.h \
+  compat/byteswap.h \
+  compat/endian.h \
+  compat/sanity.h \
   core.h \
   crypter.h \
   db.h \
@@ -207,6 +210,9 @@ libclubcoin_util_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 libclubcoin_util_a_SOURCES = \
   support/pagelocker.cpp \
   clientversion.cpp \
+  compat/glibc_sanity.cpp \
+  compat/glibcxx_sanity.cpp \
+  compat/strnlen.cpp \
   random.cpp \
   rpcprotocol.cpp \
   support/cleanse.cpp \
