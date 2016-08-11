@@ -88,6 +88,8 @@ CLUBCOIN_CORE_H = \
   script.h \
   scrypt.h \
   serialize.h \
+  support/allocators/secure.h \
+  support/allocators/zeroafterfree.h \
   support/cleanse.h \
   support/pagelocker.h \
   sync.h \
