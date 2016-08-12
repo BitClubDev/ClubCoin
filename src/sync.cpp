@@ -1,12 +1,16 @@
-// Copyright (c) 2011-2012 The Bitcoin developers
-// Distributed under the MIT/X11 software license, see the accompanying
+// Copyright (c) 2011-2015 The Bitcoin Core developers
+// Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include "sync.h"
 
 #include "util.h"
+#include "utilstrencodings.h"
+
+#include <stdio.h>
 
 #include <boost/foreach.hpp>
+#include <boost/thread.hpp>
 
 #ifdef DEBUG_LOCKCONTENTION
 void PrintLockContention(const char* pszName, const char* pszFile, int nLine)
