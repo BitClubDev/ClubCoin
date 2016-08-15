@@ -5,8 +5,17 @@ AM_CXXFLAGS = $(HARDENED_CXXFLAGS)
 AM_CPPFLAGS = $(HARDENED_CPPFLAGS)
 EXTRA_LIBRARIES =
 
+
+
+
+
+
+
+
+
+
 CLUBCOIN_CONFIG_INCLUDES=-I$(builddir)/config
-CLUBCOIN_INCLUDES=-I$(builddir) -I$(builddir)/obj $(BOOST_CPPFLAGS) $(LEVELDB_CPPFLAGS) $(CRYPTO_CFLAGS) $(SSL_CFLAGS)
+CLUBCOIN_INCLUDES=-I$(builddir) -I$(builddir)/obj $(BDB_CPPFLAGS) $(BOOST_CPPFLAGS) $(LEVELDB_CPPFLAGS) $(CRYPTO_CFLAGS) $(SSL_CFLAGS)
 
 LIBCLUBCOIN_SERVER=libclubcoin_server.a
 LIBCLUBCOIN_WALLET=libclubcoin_wallet.a
@@ -16,14 +25,32 @@ LIBCLUBCOIN_UTIL=libclubcoin_util.a
 LIBCLUBCOIN_CRYPTO=crypto/libclubcoin_crypto.a
 LIBCLUBCOINQT=qt/libclubcoinqt.a
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # Make is not made aware of per-object dependencies to avoid limiting building parallelization
 # But to build the less dependent modules first, we manually select their order here:
 EXTRA_LIBRARIES += \
-  crypto/libclubcoin_crypto.a \
-  libclubcoin_util.a \
-  libclubcoin_common.a \
-  libclubcoin_server.a \
-  libclubcoin_cli.a
+  $(LIBCLUBCOIN_CRYPTO) \
+  $(LIBCLUBCOIN_UTIL) \
+  $(LIBCLUBCOIN_COMMON) \
+  $(LIBCLUBCOIN_SERVER) \
+  $(LIBCLUBCOIN_CLI)
+
 if ENABLE_WALLET
 CLUBCOIN_INCLUDES += $(BDB_CPPFLAGS)
 #EXTRA_LIBRARIES += libclubcoin_wallet.a
@@ -52,7 +79,7 @@ if BUILD_CLUBCOIN_UTILS
 #   these don't exist yet
 endif
 
-.PHONY: FORCE
+.PHONY: FORCE check-symbols check-security
 # clubcoin core #
 CLUBCOIN_CORE_H = \
   addrman.h \
@@ -81,10 +108,11 @@ CLUBCOIN_CORE_H = \
   main.h \
   miner.h \
   mruset.h \
-  netbase.h \
   net.h \
+  netbase.h \
   pbkdf2.h \
   protocol.h \
+  random.h \
   rpcclient.h \
   rpcprotocol.h \
   rpcserver.h \
@@ -105,10 +133,11 @@ CLUBCOIN_CORE_H = \
   ui_interface.h \
   uint256.h \
   util.h \
+  utilstrencodings.h \
   utiltime.h \
   version.h \
-  walletdb.h \
   wallet.h \
+  walletdb.h \
   json/json_spirit_error_position.h \
   json/json_spirit.h \
   json/json_spirit_reader.cpp \
@@ -132,7 +161,7 @@ libclubcoin_util_a-clientversion.$(OBJEXT): obj/build.h
 # server: shared between clubcoind and clubcoin-qt
 # For now we REQUIRE the wallet sources for building. XXX
 libclubcoin_server_a_CPPFLAGS = $(AM_CPPFLAGS) $(CLUBCOIN_INCLUDES) $(MINIUPNPC_CPPFLAGS) $(EVENT_CFLAGS) $(EVENT_PTHREADS_CFLAGS)
-libclubcoin_server_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS) -I$(srcdir)/leveldb/helpers/
+libclubcoin_server_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 libclubcoin_server_a_SOURCES = \
   addrman.cpp \
   alert.cpp \
@@ -164,9 +193,22 @@ libclubcoin_server_a_SOURCES = \
   $(CLUBCOIN_CORE_H)
 
 
+
+
+
+
+if ENABLE_ZMQ
+#clubcoind_LDADD += $(LIBCLUBCOIN_ZMQ) $(ZMQ_LIBS)
+endif
+
+
+
+
+
+
+
 # wallet: shared between clubcoind and clubcoin-qt, but only linked
 # when wallet enabled
-# Including the leveldb helpers directly is definitely hacky, but it works for now.
 libclubcoin_wallet_a_CPPFLAGS = $(AM_CPPFLAGS) $(CLUBCOIN_INCLUDES)
 libclubcoin_wallet_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS) -I$(srcdir)/leveldb/helpers/
 libclubcoin_wallet_a_SOURCES = \
@@ -258,9 +300,6 @@ clubcoind_LDADD = \
 # retired LDADD
 # LIBCLUBCOIN_CRYPTO
 
-if ENABLE_ZMQ
-clubcoind_LDADD += $(LIBCLUBCOIN_ZMQ) $(ZMQ_LIBS)
-endif
 
 if ENABLE_WALLET
 #clubcoind_LDADD += libclubcoin_wallet.a
@@ -372,6 +411,7 @@ include Makefile.leveldb.include
 endif
 
 if ENABLE_TESTS
+@echo test12
 #include Makefile.test.include
 endif
 
