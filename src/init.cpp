@@ -324,7 +324,14 @@ bool AppInit2(boost::thread_group& threadGroup)
         return InitError("Initializing networking failed");
 
 #ifndef WIN32
-    umask(077);
+    if (GetBoolArg("-sysperms", false)) {
+#ifdef ENABLE_WALLET
+        if (!GetBoolArg("-disablewallet", false))
+            return InitError("-sysperms is not allowed in combination with enabled wallet functionality");
+#endif
+    } else {
+        umask(077);
+    }
 
     // Clean shutdown on SIGTERM
     struct sigaction sa;
@@ -340,6 +347,9 @@ bool AppInit2(boost::thread_group& threadGroup)
     sigemptyset(&sa_hup.sa_mask);
     sa_hup.sa_flags = 0;
     sigaction(SIGHUP, &sa_hup, NULL);
+
+    // Ignore SIGPIPE, otherwise it will bring the daemon down if the client closes unexpectedly
+    signal(SIGPIPE, SIG_IGN);
 #endif
 
     // ********************************************************* Step 2: parameter interactions
