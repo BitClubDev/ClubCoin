@@ -3,6 +3,7 @@ SUBDIRS = src
 .PHONY: deploy FORCE
 
 GZIP_ENV="-9n"
+export PYTHONPATH
 
 if BUILD_CLUBCOIN_LIBS
 pkgconfigdir = $(libdir)/pkgconfig
@@ -13,6 +14,9 @@ CLUBCOIND_BIN=$(top_builddir)/src/clubcoind$(EXEEXT)
 CLUBCOIN_QT_BIN=$(top_builddir)/src/qt/clubcoin-qt$(EXEEXT)
 CLUBCOIN_CLI_BIN=$(top_builddir)/src/clubcoin-cli$(EXEEXT)
 CLUBCOIN_WIN_INSTALLER=$(PACKAGE)-$(PACKAGE_VERSION)-win$(WINDOWS_BITS)-setup$(EXEEXT)
+
+empty :=
+space := $(empty) $(empty)
 
 OSX_APP=ClubCoin-Qt.app
 OSX_DMG=ClubCoin-Core.dmg
