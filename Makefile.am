@@ -38,9 +38,9 @@ OSX_PACKAGING = $(OSX_DEPLOY_SCRIPT) $(OSX_FANCY_PLIST) $(OSX_INSTALLER_ICONS) $
   $(top_srcdir)/contrib/macdeploy/detached-sig-create.sh \
   $(top_srcdir)/share/qt
 
-COVERAGE_INFO = baseline_filtered_combined.info baseline.info block_test.info \
+COVERAGE_INFO = baseline_filtered_combined.info baseline.info \
   leveldb_baseline.info test_clubcoin_filtered.info total_coverage.info \
-  baseline_filtered.info block_test_filtered.info rpc_test.info rpc_test_filtered.info \
+  baseline_filtered.info rpc_test.info rpc_test_filtered.info \
   leveldb_baseline_filtered.info test_clubcoin_coverage.info test_clubcoin.info
 
 dist-hook:
@@ -167,16 +167,6 @@ test_clubcoin.info: baseline_filtered_combined.info
 test_clubcoin_filtered.info: test_clubcoin.info
 	$(LCOV) -r $< "/usr/include/*" -o $@
 
-block_test.info: test_clubcoin_filtered.info
-	$(MKDIR_P) qa/tmp
-	-@TIMEOUT=15 qa/pull-tester/run-clubcoind-for-test.sh $(JAVA) -jar $(JAVA_COMPARISON_TOOL) qa/tmp/compTool $(COMPARISON_TOOL_REORG_TESTS)
-	$(LCOV) -c -d $(abs_builddir)/src --t ClubCoinJBlockTest -o $@
-	$(LCOV) -z -d $(abs_builddir)/src
-	$(LCOV) -z -d $(abs_builddir)/src/leveldb
-
-block_test_filtered.info: block_test.info
-	$(LCOV) -r $< "/usr/include/*" -o $@
-
 rpc_test.info: test_clubcoin_filtered.info
 	-@TIMEOUT=15 python qa/pull-tester/rpc-tests.py $(EXTENDED_RPC_TESTS)
 	$(LCOV) -c -d $(abs_builddir)/src --t rpc-tests -o $@
@@ -189,7 +179,7 @@ rpc_test_filtered.info: rpc_test.info
 test_clubcoin_coverage.info: baseline_filtered_combined.info test_clubcoin_filtered.info
 	$(LCOV) -a baseline_filtered.info -a leveldb_baseline_filtered.info -a test_clubcoin_filtered.info -o $@
 
-total_coverage.info: baseline_filtered_combined.info test_clubcoin_filtered.info block_test_filtered.info rpc_test_filtered.info
+total_coverage.info: baseline_filtered_combined.info test_clubcoin_filtered.info rpc_test_filtered.info
 	$(LCOV) -a baseline_filtered.info -a leveldb_baseline_filtered.info -a test_clubcoin_filtered.info -a block_test_filtered.info -a rpc_test_filtered.info -o $@ | $(GREP) "\%" | $(AWK) '{ print substr($$3,2,50) "/" $$5 }' > coverage_percent.txt
 
 test_clubcoin.coverage/.dirstamp:  test_clubcoin_coverage.info
@@ -202,12 +192,6 @@ total.coverage/.dirstamp: total_coverage.info
 
 cov: test_clubcoin.coverage/.dirstamp total.coverage/.dirstamp
 
-endif
-
-if USE_COMPARISON_TOOL
-check-local:
-	$(MKDIR_P) qa/tmp
-	@qa/pull-tester/run-clubcoind-for-test.sh $(JAVA) -jar $(JAVA_COMPARISON_TOOL) qa/tmp/compTool $(COMPARISON_TOOL_REORG_TESTS) 2>&1
 endif
 
 dist_noinst_SCRIPTS = autogen.sh
