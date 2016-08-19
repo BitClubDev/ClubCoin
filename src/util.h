@@ -93,7 +93,7 @@ extern bool fLogTimestamps;
 extern volatile bool fReopenDebugLog;
 
 void SetupEnvironment();
-/* XXX SetupNetworking() */
+bool SetupNetworking();
 
 /* Return true if log accepts specified category */
 bool LogAcceptCategory(const char* category);
