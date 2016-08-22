@@ -1,21 +1,24 @@
-DIST_SUBDIRS = 
+DIST_SUBDIRS = univalue
 
 AM_LDFLAGS = $(PTHREAD_CFLAGS) $(LIBTOOL_LDFLAGS) $(HARDENED_LDFLAGS)
 AM_CXXFLAGS = $(HARDENED_CXXFLAGS)
 AM_CPPFLAGS = $(HARDENED_CPPFLAGS)
 EXTRA_LIBRARIES =
 
+if EMBEDDED_UNIVALUE
+LIBUNIVALUE = univalue/libunivalue.la
 
-
-
-
-
-
-
-
+$(LIBUNIVALUE): $(wildcard univalue/lib/*) $(wildcard univalue/include/*)
+	$(AM_V_at)$(MAKE) $(AM_MAKEFLAGS) -C $(@D) $(@F)
+else
+LIBUNIVALUE = $(UNIVALUE_LIBS)
+endif
 
 CLUBCOIN_CONFIG_INCLUDES=-I$(builddir)/config
 CLUBCOIN_INCLUDES=-I$(builddir) -I$(builddir)/obj $(BDB_CPPFLAGS) $(BOOST_CPPFLAGS) $(LEVELDB_CPPFLAGS) $(CRYPTO_CFLAGS) $(SSL_CFLAGS)
+
+
+CLUBCOIN_INCLUDES += $(UNIVALUE_CFLAGS)
 
 LIBCLUBCOIN_SERVER=libclubcoin_server.a
 LIBCLUBCOIN_WALLET=libclubcoin_wallet.a
