@@ -86,7 +86,6 @@ endif
 # clubcoin core #
 CLUBCOIN_CORE_H = \
   addrman.h \
-  alert.h \
   allocators.h \
   arith_uint256.h \
   base58.h \
@@ -167,7 +166,6 @@ libclubcoin_server_a_CPPFLAGS = $(AM_CPPFLAGS) $(CLUBCOIN_INCLUDES) $(MINIUPNPC_
 libclubcoin_server_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 libclubcoin_server_a_SOURCES = \
   addrman.cpp \
-  alert.cpp \
   checkpoints.cpp \
   crypter.cpp \
   db.cpp \
