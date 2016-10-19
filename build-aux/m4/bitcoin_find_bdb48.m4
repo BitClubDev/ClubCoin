@@ -2,7 +2,7 @@ dnl Copyright (c) 2013-2015 The Bitcoin Core developers
 dnl Distributed under the MIT software license, see the accompanying
 dnl file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-AC_DEFUN([CLUBCOIN_FIND_BDB48],[
+AC_DEFUN([BITCOIN_FIND_BDB48],[
   AC_MSG_CHECKING([for Berkeley DB C++ headers])
   BDB_CPPFLAGS=
   BDB_LIBS=
@@ -42,16 +42,16 @@ AC_DEFUN([CLUBCOIN_FIND_BDB48],[
   done
   if test "x$bdbpath" = "xX"; then
     AC_MSG_RESULT([no])
-    AC_MSG_ERROR([libdb_cxx headers missing, Bitcoin Core requires this library for wallet functionality (--disable-wallet to disable wallet functionality)])
+    AC_MSG_ERROR([libdb_cxx headers missing, ]AC_PACKAGE_NAME[ requires this library for wallet functionality (--disable-wallet to disable wallet functionality)])
   elif test "x$bdb48path" = "xX"; then
-    CLUBCOIN_SUBDIR_TO_INCLUDE(BDB_CPPFLAGS,[${bdbpath}],db_cxx)
+    BITCOIN_SUBDIR_TO_INCLUDE(BDB_CPPFLAGS,[${bdbpath}],db_cxx)
     AC_ARG_WITH([incompatible-bdb],[AS_HELP_STRING([--with-incompatible-bdb], [allow using a bdb version other than 4.8])],[
       AC_MSG_WARN([Found Berkeley DB other than 4.8; wallets opened by this build will not be portable!])
     ],[
       AC_MSG_ERROR([Found Berkeley DB other than 4.8, required for portable wallets (--with-incompatible-bdb to ignore or --disable-wallet to disable wallet functionality)])
     ])
   else
-    CLUBCOIN_SUBDIR_TO_INCLUDE(BDB_CPPFLAGS,[${bdb48path}],db_cxx)
+    BITCOIN_SUBDIR_TO_INCLUDE(BDB_CPPFLAGS,[${bdb48path}],db_cxx)
     bdbpath="${bdb48path}"
   fi
   AC_SUBST(BDB_CPPFLAGS)
@@ -64,7 +64,7 @@ AC_DEFUN([CLUBCOIN_FIND_BDB48],[
     ])
   done
   if test "x$BDB_LIBS" = "x"; then
-      AC_MSG_ERROR([libdb_cxx missing, Bitcoin Core requires this library for wallet functionality (--disable-wallet to disable wallet functionality)])
+      AC_MSG_ERROR([libdb_cxx missing, ]AC_PACKAGE_NAME[ requires this library for wallet functionality (--disable-wallet to disable wallet functionality)])
   fi
   AC_SUBST(BDB_LIBS)
 ])
