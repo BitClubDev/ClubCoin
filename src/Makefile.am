@@ -1,4 +1,8 @@
-DIST_SUBDIRS = univalue
+# Copyright (c) 2013-2016 The Bitcoin Core developers
+# Distributed under the MIT software license, see the accompanying
+# file COPYING or http://www.opensource.org/licenses/mit-license.php.
+
+DIST_SUBDIRS = secp256k1 univalue
 
 AM_LDFLAGS = $(PTHREAD_CFLAGS) $(LIBTOOL_LDFLAGS) $(HARDENED_LDFLAGS)
 AM_CXXFLAGS = $(HARDENED_CXXFLAGS)
@@ -14,77 +18,64 @@ else
 LIBUNIVALUE = $(UNIVALUE_LIBS)
 endif
 
-CLUBCOIN_CONFIG_INCLUDES=-I$(builddir)/config
-CLUBCOIN_INCLUDES=-I$(builddir) -I$(builddir)/obj $(BDB_CPPFLAGS) $(BOOST_CPPFLAGS) $(LEVELDB_CPPFLAGS) $(CRYPTO_CFLAGS) $(SSL_CFLAGS)
+BITCOIN_CONFIG_INCLUDES=-I$(builddir)/config
+BITCOIN_INCLUDES=-I$(builddir) -I$(builddir)/obj $(BDB_CPPFLAGS) $(BOOST_CPPFLAGS) $(LEVELDB_CPPFLAGS) $(CRYPTO_CFLAGS) $(SSL_CFLAGS)
 
+BITCOIN_INCLUDES += -I$(srcdir)/secp256k1/include
+BITCOIN_INCLUDES += $(UNIVALUE_CFLAGS)
 
-CLUBCOIN_INCLUDES += $(UNIVALUE_CFLAGS)
+LIBBITCOIN_SERVER=libbitcoin_server.a
+LIBBITCOIN_COMMON=libbitcoin_common.a
+LIBBITCOIN_CONSENSUS=libbitcoin_consensus.a
+LIBBITCOIN_CLI=libbitcoin_cli.a
+LIBBITCOIN_UTIL=libbitcoin_util.a
+LIBBITCOIN_CRYPTO=crypto/libbitcoin_crypto.a
+LIBBITCOINQT=qt/libbitcoinqt.a
+LIBSECP256K1=secp256k1/libsecp256k1.la
 
-LIBCLUBCOIN_SERVER=libclubcoin_server.a
-LIBCLUBCOIN_WALLET=libclubcoin_wallet.a
-LIBCLUBCOIN_COMMON=libclubcoin_common.a
-LIBCLUBCOIN_CLI=libclubcoin_cli.a
-LIBCLUBCOIN_UTIL=libclubcoin_util.a
-LIBCLUBCOIN_CRYPTO=crypto/libclubcoin_crypto.a
-LIBCLUBCOINQT=qt/libclubcoinqt.a
+if ENABLE_ZMQ
+#LIBBITCOIN_ZMQ=libbitcoin_zmq.a
+LIBBITCOIN_ZMQ=
+endif
+if BUILD_BITCOIN_LIBS
+LIBBITCOINCONSENSUS=libbitcoinconsensus.la
+endif
+if ENABLE_WALLET
+LIBBITCOIN_WALLET=libbitcoin_wallet.a
+endif
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+$(LIBSECP256K1): $(wildcard secp256k1/src/*) $(wildcard secp256k1/include/*)
+	$(AM_V_at)$(MAKE) $(AM_MAKEFLAGS) -C $(@D) $(@F)
 
 # Make is not made aware of per-object dependencies to avoid limiting building parallelization
 # But to build the less dependent modules first, we manually select their order here:
 EXTRA_LIBRARIES += \
-  $(LIBCLUBCOIN_CRYPTO) \
-  $(LIBCLUBCOIN_UTIL) \
-  $(LIBCLUBCOIN_COMMON) \
-  $(LIBCLUBCOIN_SERVER) \
-  $(LIBCLUBCOIN_CLI)
+  $(LIBBITCOIN_CRYPTO) \
+  $(LIBBITCOIN_UTIL) \
+  $(LIBBITCOIN_COMMON) \
+  $(LIBBITCOIN_CONSENSUS) \
+  $(LIBBITCOIN_SERVER) \
+  $(LIBBITCOIN_CLI) \
+  $(LIBBITCOIN_WALLET) \
+  $(LIBBITCOIN_ZMQ)
 
-if ENABLE_WALLET
-CLUBCOIN_INCLUDES += $(BDB_CPPFLAGS)
-#EXTRA_LIBRARIES += libclubcoin_wallet.a
-endif
-if ENABLE_ZMQ
-#EXTRA_LIBRARIES += libclubcoin_zmq.a
-endif
-
-if BUILD_CLUBCOIN_LIBS
-lib_LTLIBRARIES = libclubcoinconsensus.la
-LIBCLUBCOIN_CONSENSUS=libclubcoinconsensus.la
-else
-LIBCLUBCOIN_CONSENSUS=
-endif
+lib_LTLIBRARIES = $(LIBBITCOINCONSENSUS)
 
 bin_PROGRAMS =
 TESTS =
 BENCHMARKS =
 
-if BUILD_CLUBCOIND
+if BUILD_BITCOIND
   bin_PROGRAMS += clubcoind
 endif
 
-if BUILD_CLUBCOIN_UTILS
-#  bin_PROGRAMS += clubcoin-cli clubcoin-tx
-#   these don't exist yet
+if BUILD_BITCOIN_UTILS
+  bin_PROGRAMS += clubcoin-cli clubcoin-tx
 endif
 
 .PHONY: FORCE check-symbols check-security
-# clubcoin core #
-CLUBCOIN_CORE_H = \
+# bitcoin core #
+BITCOIN_CORE_H = \
   addrman.h \
   allocators.h \
   arith_uint256.h \
@@ -153,18 +144,16 @@ CLUBCOIN_CORE_H = \
   json/json_spirit_writer.h \
   json/json_spirit_writer_template.h
 
-
 obj/build.h: FORCE
 	@$(MKDIR_P) $(builddir)/obj
 	@$(top_srcdir)/share/genbuild.sh $(abs_top_builddir)/src/obj/build.h \
 	  $(abs_top_srcdir)
-libclubcoin_util_a-clientversion.$(OBJEXT): obj/build.h
+libbitcoin_util_a-clientversion.$(OBJEXT): obj/build.h
 
 # server: shared between clubcoind and clubcoin-qt
-# For now we REQUIRE the wallet sources for building. XXX
-libclubcoin_server_a_CPPFLAGS = $(AM_CPPFLAGS) $(CLUBCOIN_INCLUDES) $(MINIUPNPC_CPPFLAGS) $(EVENT_CFLAGS) $(EVENT_PTHREADS_CFLAGS)
-libclubcoin_server_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
-libclubcoin_server_a_SOURCES = \
+libbitcoin_server_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES) $(MINIUPNPC_CPPFLAGS) $(EVENT_CFLAGS) $(EVENT_PTHREADS_CFLAGS)
+libbitcoin_server_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+libbitcoin_server_a_SOURCES = \
   addrman.cpp \
   checkpoints.cpp \
   crypter.cpp \
@@ -191,28 +180,23 @@ libclubcoin_server_a_SOURCES = \
   txmempool.cpp \
   wallet.cpp \
   walletdb.cpp \
-  $(CLUBCOIN_CORE_H)
-
-
-
-
-
+  $(BITCOIN_CORE_H)
 
 if ENABLE_ZMQ
-#clubcoind_LDADD += $(LIBCLUBCOIN_ZMQ) $(ZMQ_LIBS)
+#libbitcoin_zmq_a_CPPFLAGS = $(BITCOIN_INCLUDES) $(ZMQ_CFLAGS)
+#libbitcoin_zmq_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+#libbitcoin_zmq_a_SOURCES = \
+#  zmq/zmqabstractnotifier.cpp \
+#  zmq/zmqnotificationinterface.cpp \
+#  zmq/zmqpublishnotifier.cpp
 endif
-
-
-
-
-
 
 
 # wallet: shared between clubcoind and clubcoin-qt, but only linked
 # when wallet enabled
-libclubcoin_wallet_a_CPPFLAGS = $(AM_CPPFLAGS) $(CLUBCOIN_INCLUDES)
-libclubcoin_wallet_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS) -I$(srcdir)/leveldb/helpers/
-libclubcoin_wallet_a_SOURCES = \
+libbitcoin_wallet_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
+libbitcoin_wallet_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+libbitcoin_wallet_a_SOURCES = \
   crypter.cpp \
   db.cpp \
   rpcdump.cpp \
@@ -221,12 +205,12 @@ libclubcoin_wallet_a_SOURCES = \
   rpcwallet.cpp \
   wallet.cpp \
   scrypt.cpp \
-  $(CLUBCOIN_CORE_H)
+  $(BITCOIN_CORE_H)
 
 # crypto primitives library
-crypto_libclubcoin_crypto_a_CPPFLAGS = $(AM_CPPFLAGS) $(CLUBCOIN_CONFIG_INCLUDES)
-crypto_libclubcoin_crypto_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
-crypto_libclubcoin_crypto_a_SOURCES = \
+crypto_libbitcoin_crypto_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_CONFIG_INCLUDES)
+crypto_libbitcoin_crypto_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+crypto_libbitcoin_crypto_a_SOURCES = \
   crypto/aes.cpp \
   crypto/aes.h \
   crypto/common.h \
@@ -243,10 +227,16 @@ crypto_libclubcoin_crypto_a_SOURCES = \
   crypto/sha512.cpp \
   crypto/sha512.h
 
+# consensus: shared between all executables that validate any consensus rules.
+libbitcoin_consensus_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
+libbitcoin_consensus_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+libbitcoin_consensus_a_SOURCES = \
+  version.h
+
 # common: shared between clubcoind, and clubcoin-qt and non-server tools
-libclubcoin_common_a_CPPFLAGS = $(AM_CPPFLAGS) $(CLUBCOIN_INCLUDES)
-libclubcoin_common_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
-libclubcoin_common_a_SOURCES = \
+libbitcoin_common_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
+libbitcoin_common_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+libbitcoin_common_a_SOURCES = \
   base58.cpp \
   chainparams.cpp \
   core.cpp \
@@ -256,14 +246,14 @@ libclubcoin_common_a_SOURCES = \
   netbase.cpp \
   protocol.cpp \
   script.cpp \
-  $(CLUBCOIN_CORE_H)
+  $(BITCOIN_CORE_H)
 
 # util: shared between all executables.
 # This library *must* be included to make sure that the glibc
 # backward-compatibility objects and their sanity checks are linked.
-libclubcoin_util_a_CPPFLAGS = $(AM_CPPFLAGS) $(CLUBCOIN_INCLUDES)
-libclubcoin_util_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
-libclubcoin_util_a_SOURCES = \
+libbitcoin_util_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
+libbitcoin_util_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+libbitcoin_util_a_SOURCES = \
   support/pagelocker.cpp \
   clientversion.cpp \
   compat/glibc_sanity.cpp \
@@ -276,111 +266,100 @@ libclubcoin_util_a_SOURCES = \
   util.cpp \
   utiltime.cpp \
   utilstrencodings.cpp \
-  $(crypto_libclubcoin_crypto_a_SOURCES) \
-  $(CLUBCOIN_CORE_H)
+  $(BITCOIN_CORE_H)
 
 if GLIBC_BACK_COMPAT
-#libclubcoin_util_a_SOURCES += compat/glibc_compat.cpp
+libbitcoin_util_a_SOURCES += compat/glibc_compat.cpp
 endif
 
 # cli: shared between clubcoin-cli and clubcoin-qt
-libclubcoin_cli_a_CPPFLAGS = $(AM_CPPFLAGS) $(CLUBCOIN_INCLUDES)
-libclubcoin_cli_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
-libclubcoin_cli_a_SOURCES = \
-  rpcclient.cpp \
-  $(CLUBCOIN_CORE_H)
+libbitcoin_cli_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
+libbitcoin_cli_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+libbitcoin_cli_a_SOURCES = \
+  rpc/client.cpp \
+  $(BITCOIN_CORE_H)
 
-nodist_libclubcoin_util_a_SOURCES = $(srcdir)/obj/build.h
+nodist_libbitcoin_util_a_SOURCES = $(srcdir)/obj/build.h
 #
 
 # clubcoind binary #
 clubcoind_SOURCES = bitcoind.cpp
-clubcoind_CPPFLAGS = $(AM_CPPFLAGS) $(CLUBCOIN_INCLUDES)
+clubcoind_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
 clubcoind_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 clubcoind_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS)
 
 if TARGET_WINDOWS
-#clubcoind_SOURCES += clubcoind-res.rc
+clubcoind_SOURCES += bitcoind-res.rc
 endif
 
 clubcoind_LDADD = \
-  $(LIBCLUBCOIN_SERVER) \
-  $(LIBCLUBCOIN_COMMON) \
+  $(LIBBITCOIN_SERVER) \
+  $(LIBBITCOIN_COMMON) \
   $(LIBUNIVALUE) \
-  $(LIBCLUBCOIN_UTIL) \
+  $(LIBBITCOIN_UTIL) \
+  $(LIBBITCOIN_WALLET) \
+  $(LIBBITCOIN_ZMQ) \
+  $(LIBBITCOIN_CONSENSUS) \
+  $(LIBBITCOIN_CRYPTO) \
   $(LIBLEVELDB) \
   $(LIBMEMENV) \
   $(LIBSECP256K1)
-# retired LDADD
-# LIBCLUBCOIN_CRYPTO
 
-
-if ENABLE_WALLET
-#clubcoind_LDADD += libclubcoin_wallet.a
-endif
-
-clubcoind_LDADD += $(BOOST_LIBS) $(BDB_LIBS) $(SSL_LIBS) $(CRYPTO_LIBS) $(MINIUPNPC_LIBS) $(EVENT_PTHREADS_LIBS) $(EVENT_LIBS)
+clubcoind_LDADD += $(BOOST_LIBS) $(BDB_LIBS) $(SSL_LIBS) $(CRYPTO_LIBS) $(MINIUPNPC_LIBS) $(EVENT_PTHREADS_LIBS) $(EVENT_LIBS) $(ZMQ_LIBS)
 
 # clubcoin-cli binary #
-clubcoin_cli_SOURCES = clubcoin-cli.cpp
-clubcoin_cli_CPPFLAGS = $(AM_CPPFLAGS) $(CLUBCOIN_INCLUDES) $(EVENT_CFLAGS)
+clubcoin_cli_SOURCES = bitcoin-cli.cpp
+clubcoin_cli_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES) $(EVENT_CFLAGS)
 clubcoin_cli_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 clubcoin_cli_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS)
 
 if TARGET_WINDOWS
-clubcoin_cli_SOURCES += clubcoin-cli-res.rc
+clubcoin_cli_SOURCES += bitcoin-cli-res.rc
 endif
 
 clubcoin_cli_LDADD = \
-  $(LIBCLUBCOIN_CLI) \
+  $(LIBBITCOIN_CLI) \
   $(LIBUNIVALUE) \
-  $(LIBCLUBCOIN_UTIL)
+  $(LIBBITCOIN_UTIL) \
+  $(LIBBITCOIN_CRYPTO)
 
 clubcoin_cli_LDADD += $(BOOST_LIBS) $(SSL_LIBS) $(CRYPTO_LIBS) $(EVENT_LIBS)
 #
 
 # clubcoin-tx binary #
-clubcoin_tx_SOURCES = clubcoin-tx.cpp
-clubcoin_tx_CPPFLAGS = $(AM_CPPFLAGS) $(CLUBCOIN_INCLUDES)
+clubcoin_tx_SOURCES = bitcoin-tx.cpp
+clubcoin_tx_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
 clubcoin_tx_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 clubcoin_tx_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS)
 
 if TARGET_WINDOWS
-clubcoin_tx_SOURCES += clubcoin-tx-res.rc
+clubcoin_tx_SOURCES += bitcoin-tx-res.rc
 endif
 
 clubcoin_tx_LDADD = \
   $(LIBUNIVALUE) \
-  $(LIBCLUBCOIN_COMMON) \
-  $(LIBCLUBCOIN_UTIL) \
-  $(LIBCLUBCOIN_CRYPTO) \
+  $(LIBBITCOIN_COMMON) \
+  $(LIBBITCOIN_UTIL) \
+  $(LIBBITCOIN_CONSENSUS) \
+  $(LIBBITCOIN_CRYPTO) \
   $(LIBSECP256K1)
 
 clubcoin_tx_LDADD += $(BOOST_LIBS) $(CRYPTO_LIBS)
 #
 
-# clubcoinconsensus library #
-if BUILD_CLUBCOIN_LIBS
-include_HEADERS =
-libclubcoinconsensus_la_SOURCES = \
-  hash.cpp \
-  hash.h \
-  script.cpp \
-  script.h \
-  scrypt.cpp \
-  scrypt.h \
-  utilstrencodings.cpp \
-  utilstrencodings.h \
-  version.h
+# bitcoinconsensus library #
+if BUILD_BITCOIN_LIBS
+include_HEADERS = script/bitcoinconsensus.h
+libbitcoinconsensus_la_SOURCES = $(crypto_libbitcoin_crypto_a_SOURCES) $(libbitcoin_consensus_a_SOURCES)
 
 if GLIBC_BACK_COMPAT
-#  libclubcoinconsensus_la_SOURCES += compat/glibc_compat.cpp
+  libbitcoinconsensus_la_SOURCES += compat/glibc_compat.cpp
 endif
 
-libclubcoinconsensus_la_LDFLAGS = $(AM_LDFLAGS) -no-undefined $(RELDFLAGS)
-libclubcoinconsensus_la_LIBADD = $(LIBSECP256K1)
-libclubcoinconsensus_la_CPPFLAGS = $(AM_CPPFLAGS) -I$(builddir)/obj -DBUILD_CLUBCOIN_INTERNAL
-libclubcoinconsensus_la_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+libbitcoinconsensus_la_LDFLAGS = $(AM_LDFLAGS) -no-undefined $(RELDFLAGS)
+libbitcoinconsensus_la_LIBADD = $(LIBSECP256K1)
+libbitcoinconsensus_la_CPPFLAGS = $(AM_CPPFLAGS) -I$(builddir)/obj -I$(srcdir)/secp256k1/include -DBUILD_BITCOIN_INTERNAL
+libbitcoinconsensus_la_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 
 endif
 #
@@ -415,14 +394,22 @@ clean-local:
 	-$(MAKE) -C univalue clean
 	-rm -f leveldb/*/*.gcda leveldb/*/*.gcno leveldb/helpers/memenv/*.gcda leveldb/helpers/memenv/*.gcno
 	-rm -f config.h
+	-rm -rf test/__pycache__
 
 .rc.o:
 	@test -f $(WINDRES)
-	$(AM_V_GEN) $(WINDRES) -DWINDRES_PREPROC -i $< -o $@
+	## FIXME: How to get the appropriate modulename_CPPFLAGS in here?
+	$(AM_V_GEN) $(WINDRES) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(CPPFLAGS) -DWINDRES_PREPROC -i $< -o $@
 
 .mm.o:
 	$(AM_V_CXX) $(OBJCXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	  $(CPPFLAGS) $(AM_CXXFLAGS) $(QT_INCLUDES) $(AM_CXXFLAGS) $(PIE_FLAGS) $(CXXFLAGS) -c -o $@ $<
+
+check-symbols: $(bin_PROGRAMS)
+if GLIBC_BACK_COMPAT
+	@echo "Checking glibc back compat..."
+	$(AM_V_at) READELF=$(READELF) CPPFILT=$(CPPFILT) $(top_srcdir)/contrib/devtools/symbol-check.py < $(bin_PROGRAMS)
+endif
 
 check-security: $(bin_PROGRAMS)
 if HARDEN
@@ -432,7 +419,7 @@ endif
 
 %.pb.cc %.pb.h: %.proto
 	@test -f $(PROTOC)
-	$(AM_V_GEN) $(PROTOC) --cpp_out=$(@D) --proto_path=$(abspath $(<D) $<)
+	$(AM_V_GEN) $(PROTOC) --cpp_out=$(@D) --proto_path=$(<D) $<
 
 if EMBEDDED_LEVELDB
 include Makefile.leveldb.include
