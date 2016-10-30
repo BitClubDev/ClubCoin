@@ -61,7 +61,7 @@ private:
     void subscribeToCoreSignals();
     void unsubscribeFromCoreSignals();
 
-signals:
+Q_SIGNALS:
     void numConnectionsChanged(int count);
     void numBlocksChanged(int count);
     void alertsChanged(const QString &warnings);
@@ -70,7 +70,7 @@ signals:
     //! Asynchronous message notification
     void message(const QString &title, const QString &message, bool modal, unsigned int style);
 
-public slots:
+public Q_SLOTS:
     void updateTimer();
     void updateNumConnections(int numConnections);
 };

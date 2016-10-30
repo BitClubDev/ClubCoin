@@ -64,7 +64,7 @@ private:
         COLUMN_PRIORITY_INT64
     };
 
-private slots:
+private Q_SLOTS:
     void showMenu(const QPoint &);
     void copyAmount();
     void copyLabel();

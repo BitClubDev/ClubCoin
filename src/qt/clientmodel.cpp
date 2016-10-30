@@ -85,15 +85,15 @@ void ClientModel::updateTimer()
     {
         cachedNumBlocks = newNumBlocks;
 
-        emit numBlocksChanged(newNumBlocks);
+        Q_EMIT numBlocksChanged(newNumBlocks);
     }
 
-    emit bytesChanged(getTotalBytesRecv(), getTotalBytesSent());
+    Q_EMIT bytesChanged(getTotalBytesRecv(), getTotalBytesSent());
 }
 
 void ClientModel::updateNumConnections(int numConnections)
 {
-    emit numConnectionsChanged(numConnections);
+    Q_EMIT numConnectionsChanged(numConnections);
 }
 
 bool ClientModel::isTestNet() const

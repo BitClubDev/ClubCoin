@@ -37,6 +37,7 @@
 #include "macdockiconhandler.h"
 #endif
 
+#include <QAction>
 #include <QMainWindow>
 #include <QMenuBar>
 #include <QMenu>
@@ -391,11 +392,11 @@ void BitcoinGUI::createToolBars()
 
     int w = 0;
 
-    foreach(QAction *action, toolbar->actions()) {
+    Q_FOREACH(QAction *action, toolbar->actions()) {
         w = std::max(w, toolbar->widgetForAction(action)->width());
     }
 
-    foreach(QAction *action, toolbar->actions()) {
+    Q_FOREACH(QAction *action, toolbar->actions()) {
         toolbar->widgetForAction(action)->setFixedWidth(w);
     }
 }
@@ -846,7 +847,7 @@ void BitcoinGUI::dropEvent(QDropEvent *event)
     {
         int nValidUrisFound = 0;
         QList<QUrl> uris = event->mimeData()->urls();
-        foreach(const QUrl &uri, uris)
+        Q_FOREACH(const QUrl &uri, uris)
         {
             if (sendCoinsPage->handleURI(uri.toString()))
                 nValidUrisFound++;

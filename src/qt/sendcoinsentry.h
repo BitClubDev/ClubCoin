@@ -33,15 +33,15 @@ public:
 
     void setFocus();
 
-public slots:
+public Q_SLOTS:
     void setRemoveEnabled(bool enabled);
     void clear();
 
-signals:
+Q_SIGNALS:
     void removeEntry(SendCoinsEntry *entry);
     void payAmountChanged();
 
-private slots:
+private Q_SLOTS:
     void on_deleteButton_clicked();
     void on_payTo_textChanged(const QString &address);
     void on_addressBookButton_clicked();

@@ -58,7 +58,7 @@ private:
 
     QWidget *createDateRangeWidget();
 
-private slots:
+private Q_SLOTS:
     void contextualMenu(const QPoint &);
     void dateRangeChanged();
     void showDetails();
@@ -68,10 +68,10 @@ private slots:
     void copyAmount();
     void copyTxID();
 
-signals:
+Q_SIGNALS:
     void doubleClicked(const QModelIndex&);
 
-public slots:
+public Q_SLOTS:
     void chooseDate(int idx);
     void chooseType(int idx);
     void changedPrefix(const QString &prefix);

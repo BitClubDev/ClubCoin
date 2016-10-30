@@ -25,7 +25,7 @@ public:
 protected:
     bool eventFilter(QObject *object, QEvent *event);
 
-private slots:
+private Q_SLOTS:
     /* enable only apply button */
     void enableApplyButton();
     /* disable only apply button */
@@ -45,7 +45,7 @@ private slots:
     void updateDisplayUnit();
     void handleProxyIpValid(QValidatedLineEdit *object, bool fState);
 
-signals:
+Q_SIGNALS:
     void proxyIpValid(QValidatedLineEdit *object, bool fValid);
 
 private:

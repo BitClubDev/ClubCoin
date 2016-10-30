@@ -79,10 +79,10 @@ private:
     /** Notify listeners that data changed. */
     void emitDataChanged(int index);
 
-signals:
+Q_SIGNALS:
     void defaultAddressChanged(const QString &address);
 
-public slots:
+public Q_SLOTS:
     /* Update address list from core.
      */
     void updateEntry(const QString &address, const QString &label, bool isMine, int status);
