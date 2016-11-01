@@ -17,13 +17,13 @@
   <string>APPL</string>
 
   <key>CFBundleGetInfoString</key>
-  <string>0.13.99, Copyright © 2009-2016 The Bitcoin Core and ClubCoin developers</string>
+  <string>1.1.99, Copyright © 2009-2016 The Bitcoin Core and ClubCoin developers</string>
 
   <key>CFBundleShortVersionString</key>
-  <string>0.13.99</string>
+  <string>1.1.99</string>
 
   <key>CFBundleVersion</key>
-  <string>0.13.99</string>
+  <string>1.1.99</string>
 
   <key>CFBundleSignature</key>
   <string>????</string>
