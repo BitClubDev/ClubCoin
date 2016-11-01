@@ -36,6 +36,34 @@ inline T& REF(const T& val)
     return const_cast<T&>(val);
 }
 
+/**
+ * Important: Do not use the following functions in new code, but use v.data()
+ * and v.data() + v.size() respectively directly. They were once introduced to
+ * have a compatible, safe way to get the begin and end pointer of a vector.
+ * However with C++11 the language has built-in functionality for this and it's
+ * more readable to just use that.
+ */
+template <typename V>
+inline typename V::value_type* begin_ptr(V& v)
+{
+    return v.data();
+}
+template <typename V>
+inline const typename V::value_type* begin_ptr(const V& v)
+{
+    return v.data();
+}
+template <typename V>
+inline typename V::value_type* end_ptr(V& v)
+{
+    return v.data() + v.size();
+}
+template <typename V>
+inline const typename V::value_type* end_ptr(const V& v)
+{
+    return v.data() + v.size();
+}
+
 /////////////////////////////////////////////////////////////////
 //
 // Templates for serializing to anything that looks like a stream,
