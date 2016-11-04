@@ -1,5 +1,5 @@
 ---
-name: "clubcoin-linux-1.1.99"
+name: "clubcoin-linux-1.2.0"
 enable_cache: true
 suites:
 - "trusty"

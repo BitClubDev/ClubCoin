@@ -1,5 +1,5 @@
 ---
-name: "clubcoin-osx-1.1.99"
+name: "clubcoin-osx-1.2.0"
 enable_cache: true
 suites:
 - "trusty"
