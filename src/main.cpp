@@ -992,11 +992,12 @@ uint256 WantedByOrphan(const COrphanBlock* pblockOrphan)
 // Remove a random orphan block (which does not have any dependent orphans).
 void static PruneOrphanBlocks()
 {
+    FastRandomContext insecure_rand;
     if (mapOrphanBlocksByPrev.size() <= (size_t)std::max((int64_t)0, GetArg("-maxorphanblocks", DEFAULT_MAX_ORPHAN_BLOCKS)))
         return;
 
     // Pick a random orphan block.
-    int pos = insecure_rand() % mapOrphanBlocksByPrev.size();
+    int pos = insecure_rand.rand32() % mapOrphanBlocksByPrev.size();
     std::multimap<uint256, COrphanBlock*>::iterator it = mapOrphanBlocksByPrev.begin();
     while (pos--) it++;
 
