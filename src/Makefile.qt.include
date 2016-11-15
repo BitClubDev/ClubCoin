@@ -41,7 +41,6 @@ QT_MOC_CPP = \
   qt/moc_guiutil.cpp \
   qt/moc_macdockiconhandler.cpp \
   qt/moc_macnotificationhandler.cpp \
-  qt/moc_monitoreddatamapper.cpp \
   qt/moc_notificator.cpp \
   qt/moc_optionsdialog.cpp \
   qt/moc_optionsmodel.cpp \
@@ -98,7 +97,6 @@ BITCOIN_QT_H = \
   qt/guiutil.h \
   qt/macdockiconhandler.h \
   qt/macnotificationhandler.h \
-  qt/monitoreddatamapper.h \
   qt/notificator.h \
   qt/optionsdialog.h \
   qt/optionsmodel.h \
@@ -202,7 +200,6 @@ BITCOIN_QT_BASE_CPP = \
   qt/clientmodel.cpp \
   qt/csvmodelwriter.cpp \
   qt/guiutil.cpp \
-  qt/monitoreddatamapper.cpp \
   qt/notificator.cpp \
   qt/optionsdialog.cpp \
   qt/optionsmodel.cpp \
