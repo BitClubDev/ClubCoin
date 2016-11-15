@@ -15,6 +15,7 @@
 #include "init.h"
 #include "util.h"
 #include "wallet.h"
+#include "utilitydialog.h"
 #include "ui_interface.h"
 #include "paymentserver.h"
 #ifdef Q_OS_MAC

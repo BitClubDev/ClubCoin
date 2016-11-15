@@ -58,7 +58,7 @@ QT_MOC_CPP = \
   qt/moc_transactionfilterproxy.cpp \
   qt/moc_transactiontablemodel.cpp \
   qt/moc_transactionview.cpp \
-  qt/utilitydialog.cpp \
+  qt/moc_utilitydialog.cpp \
   qt/moc_walletmodel.cpp
 
 BITCOIN_MM = \
