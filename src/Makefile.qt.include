@@ -58,6 +58,7 @@ QT_MOC_CPP = \
   qt/moc_transactionfilterproxy.cpp \
   qt/moc_transactiontablemodel.cpp \
   qt/moc_transactionview.cpp \
+  qt/utilitydialog.cpp \
   qt/moc_walletmodel.cpp
 
 BITCOIN_MM = \
@@ -116,6 +117,7 @@ BITCOIN_QT_H = \
   qt/transactionrecord.h \
   qt/transactiontablemodel.h \
   qt/transactionview.h \
+  qt/utilitydialog.h \
   qt/walletmodel.h \
   qt/winshutdownmonitor.h
 
@@ -206,7 +208,8 @@ BITCOIN_QT_BASE_CPP = \
   qt/qvalidatedlineedit.cpp \
   qt/qvaluecombobox.cpp \
   qt/rpcconsole.cpp \
-  qt/trafficgraphwidget.cpp
+  qt/trafficgraphwidget.cpp \
+  qt/utilitydialog.cpp
 
 BITCOIN_QT_WINDOWS_CPP = qt/winshutdownmonitor.cpp
 
