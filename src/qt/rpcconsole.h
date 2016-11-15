@@ -1,7 +1,17 @@
-#ifndef RPCCONSOLE_H
-#define RPCCONSOLE_H
+// Copyright (c) 2011-2015 The Bitcoin Core developers
+// Distributed under the MIT software license, see the accompanying
+// file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#include <QDialog>
+#ifndef BITCOIN_QT_RPCCONSOLE_H
+#define BITCOIN_QT_RPCCONSOLE_H
+
+#include "guiutil.h"
+//#include "peertablemodel.h"
+
+#include "net.h"
+
+#include <QWidget>
+#include <QCompleter>
 
 namespace Ui {
     class RPCConsole;
@@ -72,4 +82,4 @@ private:
     void startExecutor();
 };
 
-#endif // RPCCONSOLE_H
+#endif // BITCOIN_QT_RPCCONSOLE_H

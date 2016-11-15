@@ -7,16 +7,24 @@
 #include "rpcserver.h"
 #include "rpcclient.h"
 
-#include <QTime>
-#include <QThread>
-#include <QKeyEvent>
-#include <QUrl>
-#include <QScrollBar>
-
 #include <openssl/crypto.h>
 
 #ifdef ENABLE_WALLET
 #include <db_cxx.h>
+#endif
+
+#include <QKeyEvent>
+#include <QMenu>
+#include <QScrollBar>
+#include <QSettings>
+#include <QSignalMapper>
+#include <QThread>
+#include <QTime>
+#include <QTimer>
+#include <QStringList>
+
+#if QT_VERSION < 0x050000
+#include <QUrl>
 #endif
 
 // TODO: add a scrollback limit, as there is currently none
@@ -46,19 +54,16 @@ class RPCExecutor : public QObject
     Q_OBJECT
 
 public Q_SLOTS:
-    void start();
     void request(const QString &command);
 
 Q_SIGNALS:
     void reply(int category, const QString &command);
 };
 
+
+
 #include "rpcconsole.moc"
 
-void RPCExecutor::start()
-{
-   // Nothing to do
-}
 
 /**
  * Split shell command line into a list of arguments. Aims to emulate \c bash and friends.
