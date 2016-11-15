@@ -2,14 +2,17 @@
 #include "ui_optionsdialog.h"
 
 #include "bitcoinunits.h"
-#include "monitoreddatamapper.h"
 #include "netbase.h"
 #include "optionsmodel.h"
 
+#include <boost/thread.hpp>
+
+#include <QDataWidgetMapper>
 #include <QDir>
 #include <QIntValidator>
 #include <QLocale>
 #include <QMessageBox>
+#include <QTimer>
 
 OptionsDialog::OptionsDialog(QWidget *parent) :
     QDialog(parent),
@@ -75,7 +78,7 @@ OptionsDialog::OptionsDialog(QWidget *parent) :
     ui->unit->setModel(new BitcoinUnits(this));
 
     /* Widget-to-option mapper */
-    mapper = new MonitoredDataMapper(this);
+    mapper = new QDataWidgetMapper(this);
     mapper->setSubmitPolicy(QDataWidgetMapper::ManualSubmit);
     mapper->setOrientation(Qt::Vertical);
 

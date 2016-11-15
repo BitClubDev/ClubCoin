@@ -2,6 +2,11 @@
 #define OPTIONSDIALOG_H
 
 #include <QDialog>
+#include <QValidator>
+
+QT_BEGIN_NAMESPACE
+class QDataWidgetMapper;
+QT_END_NAMESPACE
 
 namespace Ui {
 class OptionsDialog;
@@ -51,7 +56,7 @@ Q_SIGNALS:
 private:
     Ui::OptionsDialog *ui;
     OptionsModel *model;
-    MonitoredDataMapper *mapper;
+    QDataWidgetMapper *mapper;
     bool fRestartWarningDisplayed_Proxy;
     bool fRestartWarningDisplayed_Lang;
     bool fProxyIpValid;
