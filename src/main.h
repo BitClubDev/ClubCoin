@@ -57,6 +57,7 @@ static const unsigned int LOCKTIME_THRESHOLD = 500000000; // Tue Nov  5 00:53:20
 
 static const int LAST_POW_BLOCK = 1300;
 static const int POW_BLOCK_REWARD = 100000;
+static const int64_t COIN_YEAR_REWARD = 10 * CENT;
 
 inline bool IsProtocolV1RetargetingFixed(int nHeight) { return true; }
 inline bool IsProtocolV2(int nHeight) { return true; }
@@ -67,7 +68,8 @@ inline int64_t FutureDrift(int64_t nTime, int nHeight) { return IsProtocolV2(nHe
 
 inline unsigned int GetTargetSpacing(int nHeight) { return 128; } // Targetted block spacing in seconds. The P2P network should average to it in the long term.
 
-inline uint64_t GetDynamicBlockHeightPoSAward(uint32_t nHeight) {
+// Disabled for now to be looked at later for a better implementation
+/*inline uint64_t GetDynamicBlockHeightPoSAward(uint32_t nHeight) {
     uint32_t current_year = nHeight / ((60 * 60 * 24 * 365) / GetTargetSpacing(0)) + 1;
 
     if (current_year <= 2) {
@@ -88,6 +90,7 @@ inline uint64_t GetDynamicBlockHeightPoSAward(uint32_t nHeight) {
         return (uint64_t)(0.25 * CENT);
     }
     return (uint64_t)(0.00001 * CENT);
+*/
 /*
     Numerically, the calculated awards (for spacing=128) are:
     height: 0, award: 20000000

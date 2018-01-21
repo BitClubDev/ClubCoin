@@ -196,7 +196,7 @@ bool GetNodeStateStats(NodeId nodeid, CNodeStateStats &stats) {
     stats.nMisbehavior = state->nMisbehavior;
     return true;
 }
- 
+
 void RegisterNodeSignals(CNodeSignals& nodeSignals)
 {
     nodeSignals.ProcessMessages.connect(&ProcessMessages);
@@ -1034,12 +1034,12 @@ int64_t GetProofOfWorkReward(int64_t nFees)
     return nSubsidy + nFees;
 }
 
-// miner's coin stake reward based on coin age spent (coin-days)
+// miner's coin stake
 int64_t GetProofOfStakeReward(int64_t nCoinAge, int64_t nFees, uint32_t nBlockHeight)
 {
-    uint64_t year_reward = GetDynamicBlockHeightPoSAward(nBlockHeight);
+    // uint64_t year_reward = GetDynamicBlockHeightPoSAward(nBlockHeight);
 
-    int64_t nSubsidy = nCoinAge * year_reward * 33 / (365 * 33 + 8);
+    int64_t nSubsidy = nCoinAge * COIN_YEAR_REWARD * 33 / (365 * 33 + 8);
 
     LogPrint("creation", "GetProofOfStakeReward(): create=%s nCoinAge=%d\n", FormatMoney(nSubsidy), nCoinAge);
 
@@ -3623,7 +3623,7 @@ bool SendMessages(CNode* pto, bool fSendTrickle)
                 CNode::Ban(pto->addr);
             }
             State(pto->GetId())->fShouldBan = false;
-        } 
+        }
 
         // Start block sync
         if (pto->fStartSync && !fImporting && !fReindex) {
